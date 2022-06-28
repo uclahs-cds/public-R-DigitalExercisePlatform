@@ -18,4 +18,4 @@ jobs:
               path: DigITx
          - run: R CMD build --compact-vignettes="gs+qpdf" DigITx
          - run: R CMD check --as-cran --run-donttest DigITx_*.tar.gz
-         - run: Rscript -e 'install.packages("devtools"); devtools::install_local(dependencies = T, force = T); source("inst/run_all_analyses")'
+         - run: Rscript -e 'install.packages("devtools"); devtools::install_local(dependencies = T, force = T); source("inst/run_all_analyses.R")'
