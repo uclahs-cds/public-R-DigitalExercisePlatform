@@ -16,9 +16,6 @@ jobs:
          - uses: actions/checkout@v2
            with:
               path: DigITx
-         - name: Build package
-           - run: R CMD build --compact-vignettes="gs+qpdf" DigITx
-         - name: Check package
-           - run: R CMD check --as-cran --run-donttest DigITx_*.tar.gz
-         - name: Install and run scripts
-           - run: Rscript -e 'install.packages("devtools"); devtools::install_local(dependencies = T, force = T); source("inst/run_all_analyses")'
+         - run: R CMD build --compact-vignettes="gs+qpdf" DigITx
+         - run: R CMD check --as-cran --run-donttest DigITx_*.tar.gz
+         - run: Rscript -e 'install.packages("devtools"); devtools::install_local(dependencies = T, force = T); source("inst/run_all_analyses")'
