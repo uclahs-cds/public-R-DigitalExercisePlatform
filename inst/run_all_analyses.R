@@ -3,7 +3,7 @@ library(BoutrosLab.plotting.general);
 
 run.date <- Sys.Date();
 
-script.name <- 'plot_cost_analysis';
+script.name <- 'run_all_analyses';
 data.folder <- Sys.getenv('DIGITX_HOME');
 if(data.folder == "") data.folder <- here::here('results');
 
@@ -16,9 +16,9 @@ dir.create(log.path, showWarnings = FALSE, recursive = TRUE);
 cat('Writing log files to: ', log.path, '\n');
 cat('Writing plots to: ', plot.path, '\n');
 
-
 sink(file = file.path(log.path, paste0(run.date, '_', script.name, '.log')), split = TRUE);
 
+# Cost analysis
 cost_data <- read.table(here::here('data/patient_cost_hours.tsv'), sep = '\t', header = TRUE);
 cost_hour_analysis(cost_data);
 

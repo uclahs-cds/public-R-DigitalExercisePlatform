@@ -15,6 +15,10 @@ jobs:
       steps:
          - uses: actions/checkout@v2
            with:
-              path: BoutrosLabTemplate
-         - run: R CMD build --compact-vignettes="gs+qpdf" BoutrosLabTemplate
-         - run: R CMD check --as-cran --run-donttest BoutrosLabTemplate_*.tar.gz
+              path: DigITx
+         - name: Build package
+           - run: R CMD build --compact-vignettes="gs+qpdf" DigITx
+         - name: Check package
+           - run: R CMD check --as-cran --run-donttest DigITx_*.tar.gz
+         - name: Install and run scripts
+           - run: Rscript -e 'install.packages("devtools"); devtools::install_local(dependencies = T, force = T); source("inst/run_all_analyses")'
