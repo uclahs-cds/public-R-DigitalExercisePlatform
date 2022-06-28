@@ -1,15 +1,14 @@
-Package: BoutrosLabTemplate
+Package: DigITx
 Type: Package
-Title: What the Package Does (Title Case)
+Title: A Digital, Decentralized Clinical Trial of Exercise Therapy in Cancer (DigITx)
 Version: 0.1.0
 Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Maintainer: Stefan Eng <stefaneng@mednet.ucla.edu>
+Description: Code for 'A Digital, Decentralized Clinical Trial of Exercise Therapy in Cancer (DigITx)'
 Depends: 
     R (>= 2.10)
-Imports:
 Suggests: 
+    openxlsx,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 License: GPL-2
