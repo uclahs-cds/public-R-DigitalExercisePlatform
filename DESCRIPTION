@@ -8,7 +8,6 @@ Description: Code for 'A Digital, Decentralized Clinical Trial of Exercise Thera
 Depends: 
     R (>= 2.10)
 Suggests: 
-    openxlsx,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 License: GPL-2

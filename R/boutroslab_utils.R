@@ -6,18 +6,23 @@
 #' @return No return value, just writes output to file (and possibly screen).
 #'
 #' @export
-save.session.profile <- function (filename, stdout = FALSE) {
-	sink(file = filename, split = stdout)
-	cat("### Memory #########################################################################################\n")
-	print(gc())
-	cat("\n### Time ###########################################################################################\n")
-	print(proc.time())
-	cat("\n### Full list of objects ###########################################################################\n")
-	print(ls.objects(order.by = "Size", n = length(ls(pos = 1))))
-	cat("\n### Session Info ###################################################################################\n")
-	print(sessionInfo())
-	sink()
-}
+save.session.profile <- function(filename, stdout = FALSE, append = FALSE) {
+	sink(file = filename, split = stdout, append = append);
+  session.profile();
+	sink();
+  }
+
+#' @export
+session.profile <- function() {
+  cat("### Memory #########################################################################################\n")
+  print(gc())
+  cat("\n### Time ###########################################################################################\n")
+  print(proc.time())
+  cat("\n### Full list of objects ###########################################################################\n")
+  print(ls.objects(order.by = "Size", n = length(ls(pos = 1))))
+  cat("\n### Session Info ###################################################################################\n")
+  print(sessionInfo())
+  };
 
 #' Improved listing of objects in R session
 #'
