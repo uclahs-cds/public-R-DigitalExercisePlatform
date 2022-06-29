@@ -18,7 +18,7 @@ analysis.init(
       sep = '\t',
       header = TRUE
     );
-    cost_hour_analysis(
+    cost.hour.analysis(
       cost.data = cost.data,
       plot.path = plot.path
     );

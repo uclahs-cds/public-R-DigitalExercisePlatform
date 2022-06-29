@@ -1,27 +1,25 @@
 library(DigITx);
 library(BoutrosLab.plotting.general);
 
-script.name <- 'cost_analysis';
+script.name <- 'daily_summary_states';
 data.folder <- Sys.getenv('DIGITX_HOME');
 if(data.folder == "") data.folder <- here::here('results');
+plot.path <- file.path(data.folder, 'plots', script.name);
 
 analysis.init(
   data.folder = data.folder,
   script.name = script.name,
   split.stdout = TRUE,
   expr = {
-    plot.path <- file.path(data.folder, 'plots', 'study_time_costs');
-
-    cost.data <- read.table(
-      here::here('data/patient_cost_hours.tsv'),
+    daily.summary <- read.table(
+      here::here('data/daily_summary.tsv'),
       sep = '\t',
       header = TRUE
       );
-    # cost.data$plot.color <- unlist(cancer.type.colors[cost.data$Cancer.Type])
 
-    cost.hour.analysis(
-      cost.data = cost.data,
+    daily.summary.states.analysis(
+      daily.summary = daily.summary,
       plot.path = plot.path
       );
     }
-  );
+);

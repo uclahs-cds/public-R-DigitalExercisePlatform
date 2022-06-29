@@ -26,7 +26,7 @@ plot.study.hours <- function(cost.data, plot.path, extension, ...) {
     ylimits = c(-10, 175),
     filename = file.path(
       plot.path,
-      generate.filename('ExOnc', file.core = 'phase0b_boxplot.study.hours', extension = extension)
+      generate.filename('digIT-EX', file.core = 'phase0b_boxplot.study.hours', extension = extension)
       ),
       ...
     );
@@ -52,7 +52,7 @@ plot.total.cost <- function(cost.data, plot.path, extension, ...) {
     xlab.label = '',
     filename = file.path(
       plot.path,
-      generate.filename('ExOnc', file.core = 'phase0b_boxplot.total.cost', extension = extension)
+      generate.filename('digIT-EX', file.core = 'phase0b_boxplot.total.cost', extension = extension)
     ),
     ...
   );
@@ -60,7 +60,7 @@ plot.total.cost <- function(cost.data, plot.path, extension, ...) {
 
 #' Full cost/hour analysis
 #' @param cost.data hours and cost data
-cost_hour_analysis <- function(cost.data, plot.path, extension = 'png', color.points = FALSE) {
+cost.hour.analysis <- function(cost.data, plot.path, extension = 'png', color.points = FALSE) {
   # BPG Parameters
   bpg.shared <- list(
     points.cex = 1,

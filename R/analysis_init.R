@@ -4,8 +4,8 @@ analysis.init <- function(data.folder, script.name, split.stdout = TRUE, expr) {
 
   run.date <- Sys.Date();
 
-  plot.path <- file.path(data.folder, 'plots', 'study_time_costs');
-  log.path <- file.path(data.folder, 'logs', 'study_time_costs');
+  plot.path <- file.path(data.folder, 'plots', script.name);
+  log.path <- file.path(data.folder, 'logs', script.name);
 
   dir.create(plot.path, showWarnings = FALSE, recursive = TRUE);
   dir.create(log.path, showWarnings = FALSE, recursive = TRUE);

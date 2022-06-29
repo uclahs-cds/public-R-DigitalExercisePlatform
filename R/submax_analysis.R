@@ -1,11 +1,11 @@
-submax_analysis <- function(submax.long.data, plot.path, extension = 'png', color.points = FALSE) {
-  t_test_results <- t.test(
+submax.analysis <- function(submax.long.data, plot.path, extension = 'png', color.points = FALSE) {
+  t.test.results <- t.test(
     x = submax.long.data$Time.to.submax[submax.long.data$Session == "BL"],
     y = submax.long.data$Time.to.submax[submax.long.data$Session == "FU"],
     paired = TRUE,
     alternative = "two.sided"
     );
-  test_text_labels <- paste0('t-test p = ', round(t_test_results$p.value, 3))
+  test.text.labels <- paste0('t-test p = ', round(t.test.results$p.value, 3))
 
   create.scatterplot(
     Time.to.submax ~ as.factor(Session),
@@ -26,10 +26,10 @@ submax_analysis <- function(submax.long.data, plot.path, extension = 'png', colo
     text.y = 300,
     text.cex = 1,
     resolution = 200,
-    text.labels = test_text_labels,
+    text.labels = test.text.labels,
     filename = file.path(
       plot.path,
-      generate.filename('ExOnc', file.core = 'phase0b_submax', extension = extension)
+      generate.filename('digIT-EX', file.core = 'phase0b_submax', extension = extension)
       )
     );
   }

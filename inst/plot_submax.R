@@ -1,7 +1,7 @@
 library(DigITx);
 library(BoutrosLab.plotting.general);
 
-script.name <- 'submax_analysis';
+script.name <- 'submax.analysis';
 data.folder <- Sys.getenv('DIGITX_HOME');
 if(data.folder == "") data.folder <- here::here('results');
 
@@ -18,7 +18,7 @@ analysis.init(
       header = TRUE
       );
 
-    submax_analysis(
+    submax.analysis(
       submax.long.data = submax.long.data[! submax.long.data$Study.ID %in% c('EX001', 'EX002', 'EX003'), ],
       plot.path = plot.path,
       );
