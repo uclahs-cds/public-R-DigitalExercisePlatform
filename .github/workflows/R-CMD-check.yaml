@@ -16,6 +16,5 @@ jobs:
          - uses: actions/checkout@v2
            with:
               path: DigITx
-         - run: Rscript -e 'install.packages(c("xml2", "roxygen2", "devtools")); devtools::install_local(dependencies = T, force = T); source("inst/run_all_analyses.R")'
          - run: R CMD build --compact-vignettes="gs+qpdf" DigITx
          - run: R CMD check --as-cran --run-donttest DigITx_*.tar.gz
