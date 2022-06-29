@@ -1,7 +1,7 @@
 library(DigITx);
 library(BoutrosLab.plotting.general);
 
-script.name <- 'run_all_analyses';
+script.name <- 'cost_analysis';
 data.folder <- Sys.getenv('DIGITX_HOME');
 if(data.folder == "") data.folder <- here::here('results');
 

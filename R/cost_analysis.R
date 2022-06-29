@@ -60,7 +60,7 @@ plot.total.cost <- function(cost.data, plot.path, extension, ...) {
 
 #' Full cost/hour analysis
 #' @param cost.data hours and cost data
-cost_hour_analysis <- function(cost.data, plot.path, color.points = FALSE) {
+cost_hour_analysis <- function(cost.data, plot.path, extension = 'png', color.points = FALSE) {
   # BPG Parameters
   bpg.shared <- list(
     points.cex = 1,
@@ -68,7 +68,7 @@ cost_hour_analysis <- function(cost.data, plot.path, color.points = FALSE) {
     ylab.axis.padding = 3,
     points.col = if(color.points) cost.data$plot.color else 'darkgrey',
     xaxis.lab = c('Traditional', 'DigITx'),
-    extension = 'png'
+    extension = extension
     );
 
   cost.data$phase0b <- ifelse(as.numeric(cost.data$Patient >= 4), TRUE, FALSE);
