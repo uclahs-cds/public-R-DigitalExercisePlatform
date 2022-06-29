@@ -17,6 +17,8 @@ analysis.init(
       sep = '\t',
       header = TRUE
       );
+    # cost.data$plot.color <- unlist(cancer.type.colors[cost.data$Cancer.Type])
+
     cost_hour_analysis(
       cost.data = cost.data,
       plot.path = plot.path

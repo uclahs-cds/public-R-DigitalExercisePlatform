@@ -60,12 +60,13 @@ plot.total.cost <- function(cost.data, plot.path, extension, ...) {
 
 #' Full cost/hour analysis
 #' @param cost.data hours and cost data
-cost_hour_analysis <- function(cost.data, plot.path) {
+cost_hour_analysis <- function(cost.data, plot.path, color.points = FALSE) {
   # BPG Parameters
   bpg.shared <- list(
     points.cex = 1,
     ylab.cex = 1.75,
     ylab.axis.padding = 3,
+    points.col = if(color.points) cost.data$plot.color else 'darkgrey',
     xaxis.lab = c('Traditional', 'DigITx'),
     extension = 'png'
     );
