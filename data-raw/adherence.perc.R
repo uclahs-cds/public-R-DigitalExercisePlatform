@@ -3,6 +3,10 @@
 adherence.phase0a <- read.table(here::here('inst/data-raw/adherence_phase0a.tsv'), header = TRUE, sep = '\t');
 adherence.phase0b <- read.table(here::here('inst/data-raw/adherence_phase0b.tsv'), header = TRUE, sep = '\t');
 
+# adherence.phase0b$Patient.ID <- c("EX004", "EX005", "EX006", "EX008",
+#                                   "EX010", "EX011", "EX012", "EX014", "EX015", "EX016", "EX017",
+#                                   "EX018", "EX019")
+
 adherence.perc.phase0a <- adherence.to.long(adherence.phase0a);
 adherence.perc.phase0b <- adherence.to.long(adherence.phase0b);
 

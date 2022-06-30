@@ -3,13 +3,13 @@ adherence.to.long <- function(x, scale.percent = TRUE) {
 
   x.percent.long <- do.call(
     what = 'rbind.data.frame',
-    args = lapply(names(perc.phase0a), function(cname) {
-      x <- perc.phase0a[[cname]];
+    args = lapply(names(x.percent), function(cname) {
+      perc.col <- x.percent[[cname]];
       new.cname <- gsub('\\.Percent', '', cname);
       cbind(
-        Percent = x,
+        Percent = perc.col,
         Variable = new.cname,
-        Patient.ID = adherence.phase0a$Patient.ID
+        Patient.ID = x$Patient.ID
       )
     })
   );
