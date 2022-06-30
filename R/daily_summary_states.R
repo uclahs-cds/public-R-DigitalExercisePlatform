@@ -154,7 +154,8 @@ daily.summary.percentile.plot <- function(
     );
   }
 
-daily.summary.states.analysis <- function(
+#' @export
+daily.summary.boxplot <- function(
     daily.summary,
     plot.path,
     extension = 'png',

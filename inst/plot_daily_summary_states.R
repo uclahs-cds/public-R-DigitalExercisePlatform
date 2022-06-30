@@ -17,7 +17,7 @@ analysis.init(
       header = TRUE
       );
 
-    daily.summary.states.analysis(
+    daily.summary.percentile.plot(
       daily.summary = daily.summary,
       plot.path = plot.path
       );

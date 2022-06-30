@@ -6,7 +6,8 @@ cancer.type.colors <- list(
 
 simplified.state.colour.scheme <- list(
   'Sleep' = '#5384B9',
-  'Sedentary' = '#FFFAC5',
+  # 'Sedentary' = '#FFFAC5',
+  'Sedentary' = '#e2ce00',
   'Intermittent' = '#FCD385',
   'Active' = '#F46439',
   'Exercise' = '#912613',
