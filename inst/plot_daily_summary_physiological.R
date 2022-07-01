@@ -36,7 +36,6 @@ analysis.init(
       'rest.hr.sleep.mean',
       'rest.cgm.sleep.mean',
       'mass',
-      'lean.proportion',
       'fat.proportion',
       'systolic',
       'diastolic'
@@ -45,8 +44,7 @@ analysis.init(
     vars.nice.names <- c(
       'Resting HR',
       'Resting glucose',
-      'Body mass (lbs)',
-      '% Lean mass',
+      'Body mass',
       '% Fat mass',
       'Systolic BP',
       'Diastolic BP'
@@ -108,13 +106,22 @@ analysis.init(
     pvalue.barplot.data <- data.frame(
       variable = factor(physiological.vars, levels = physiological.vars[p.value.ordering]),
       pvalue = physio.mod.pvalues,
-      effect_size = physio.mod.summary$estimate
+      effect.size = physio.mod.summary$estimate
       );
 
-#     colorRampPalette(c('dodgerblue', 'darkorange1'))(pvalue.barplot.data$effect_size)
+    pvalue.barplot.data <- pvalue.barplot.data[p.value.ordering, ];
+
+    # effect.size.scaled <- round(pvalue.barplot.data$effect.size * 1000);
+    # effect.size.range <- range(effect.size.scaled);
+    #
+    # effect.size.colors <- colorRampPalette(c('darkorange1', 'dodgerblue2'))(diff(effect.size.range) + 1);
+    # actual.colors <- effect.size.colors[effect.size.scaled + abs(min(effect.size.scaled)) + 1];
+    effect.colors <- ifelse(pvalue.barplot.data$effect.size > 0, 'darkorange1', 'dodgerblue2');
+
     pvalue.barplot <- create.barplot(
       formula = variable ~ -log10(pvalue),
-      data = pvalue.barplot.data[p.value.ordering, ],
+      data = pvalue.barplot.data,
+      col = effect.colors,
       plot.horizontal = TRUE,
       yaxis.lab = rep('', length(physiological.vars)),
       xlab.label = expression('-log'['10']~'(p-value)'),
@@ -137,7 +144,7 @@ analysis.init(
       layout.height = 1,
       layout.width = 2,
       x.spacing = 0,
-      plot.objects.widths = c(1, 0.2),
+      plot.objects.widths = c(1, 0.25),
       width = 14,
       height = 8,
       filename = filename
