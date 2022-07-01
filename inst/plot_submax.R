@@ -21,6 +21,7 @@ analysis.init(
     submax.analysis(
       submax.long.data = submax.long.data[! submax.long.data$Study.ID %in% c('EX001', 'EX002', 'EX003'), ],
       plot.path = plot.path,
+      color.points = TRUE
       );
     }
   );

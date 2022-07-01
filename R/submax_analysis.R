@@ -9,26 +9,47 @@ submax.analysis <- function(submax.long.data, plot.path, extension = 'png', colo
 
   submax.long.data$Time.to.submax.minutes <- submax.long.data$Time.to.submax / 60;
 
+  key <- NULL;
+  if(color.points) {
+    key <- list(
+      text =  list(
+        lab = names(cancer.type.colors)
+        ),
+      lines = list(
+        pch = 19,
+        type = 'b',
+        size = 3,
+        cex = 0.75,
+        col = unlist(cancer.type.colors)
+        ),
+      border = TRUE,
+      divide = 1,
+      corner = c(0.05, 0.05)
+      );
+    }
+
   create.scatterplot(
     Time.to.submax.minutes ~ as.factor(Session),
     data = submax.long.data,
     groups = submax.long.data$Study.ID,
-    col = submax.long.data$plot.color[submax.long.data$Session == "BL"],
+    col = if(color.points) submax.long.data$plot.color[submax.long.data$Session == "BL"] else 'black',
+    group.specific.colouring = color.points,
     type = 'b',
     main.cex = 1.75,
     ylimits = c(4, 15),
     ylab.cex = 1.5,
     xaxis.lab = c('Baseline', 'Follow-up'),
-    ylab.label = 'Time to submax (minutes)',
+    ylab.label = 'Time to Submax (minutes)',
     xaxis.cex = 1.25,
     ylab.axis.padding = 3,
     xlab.label = '',
     add.text = TRUE,
-    text.x = 1.5,
+    text.x = 2,
     text.y = 5,
     text.cex = 1,
     resolution = 200,
     text.labels = test.text.labels,
+    key = key,
     filename = file.path(
       plot.path,
       generate.filename('digIT-EX', file.core = 'phase0b_submax', extension = extension)
