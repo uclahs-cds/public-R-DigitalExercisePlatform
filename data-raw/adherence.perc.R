@@ -10,5 +10,21 @@ adherence.phase0b <- read.table(here::here('inst/data-raw/adherence_phase0b.tsv'
 adherence.perc.phase0a <- adherence.to.long(adherence.phase0a);
 adherence.perc.phase0b <- adherence.to.long(adherence.phase0b);
 
+# Order by median percentage in phase0b
+adherence.phase0b.perc.cols <- adherence.phase0b[, grepl('\\.Percent', colnames(adherence.phase0b))];
+adherence.order <- unique(adherence.perc.phase0b$Variable)[
+  order(unlist(lapply(adherence.phase0b.perc.cols, median, na.rm = TRUE)), decreasing = TRUE)
+  ];
+
+adherence.perc.phase0a$Variable.factor <- factor(
+  adherence.perc.phase0a$Variable,
+  levels = adherence.order
+  );
+
+adherence.perc.phase0b$Variable.factor <- factor(
+  adherence.perc.phase0b$Variable,
+  levels = adherence.order
+  );
+
 usethis::use_data(adherence.perc.phase0a, overwrite = TRUE);
 usethis::use_data(adherence.perc.phase0b, overwrite = TRUE);

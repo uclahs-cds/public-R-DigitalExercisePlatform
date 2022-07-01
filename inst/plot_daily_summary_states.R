@@ -12,7 +12,7 @@ analysis.init(
   split.stdout = TRUE,
   expr = {
     daily.summary <- read.table(
-      here::here('data/daily_summary.tsv'),
+      here::here('inst/data-raw/daily_summary.tsv'),
       sep = '\t',
       header = TRUE
       );

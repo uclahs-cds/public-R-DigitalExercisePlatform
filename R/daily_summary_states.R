@@ -1,3 +1,4 @@
+#' Creates the 'Mean: XX' text for the multipanel percentile/boxplot for lifestyle states
 state.week.text <- function(
   daily.summary,
   max.study.day = 49
@@ -34,6 +35,7 @@ state.week.text <- function(
   })
 }
 
+#' Percentile plot
 #' @export
 daily.summary.percentile.plot <- function(
     daily.summary,
