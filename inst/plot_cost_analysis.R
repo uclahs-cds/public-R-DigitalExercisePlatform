@@ -13,11 +13,10 @@ analysis.init(
     plot.path <- file.path(data.folder, 'plots', 'study_time_costs');
 
     cost.data <- read.table(
-      here::here('data/patient_cost_hours.tsv'),
+      here::here('inst/data-raw/patient_cost_hours.tsv'),
       sep = '\t',
       header = TRUE
       );
-    # cost.data$plot.color <- unlist(cancer.type.colors[cost.data$Cancer.Type])
 
     cost.hour.analysis(
       cost.data = cost.data,

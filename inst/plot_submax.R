@@ -13,7 +13,7 @@ analysis.init(
     plot.path <- file.path(data.folder, 'plots', 'submax');
 
     submax.long.data <- read.table(
-      here::here('data/submax_long.tsv'),
+      here::here('inst/data-raw/submax_long.tsv'),
       sep = '\t',
       header = TRUE
       );
