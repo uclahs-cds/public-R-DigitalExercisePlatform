@@ -58,10 +58,8 @@ analysis.init(
       });
     names(physio.mods) <- physiological.vars;
 
-    physio.mod.summary <- do.call('rbind.data.frame', lapply(physio.mods, function(m) {
-      summary(m)$coefficients['nday', c('Estimate', 'Pr(>|t|)')]
-      }));
-    colnames(physio.mod.summary) <- c('estimate', 'pvalue');
+    physio.mod.summary <- model_linear_daily_summary(daily.summary);
+    physio.mod.summary <- physio.mod.summary[physio.mod.summary$var.type == 'Physiological', ];
 
     # Extract the p-values from the lmertest summary for nday coefficient
     physio.mod.pvalues <- physio.mod.summary$pvalue;
