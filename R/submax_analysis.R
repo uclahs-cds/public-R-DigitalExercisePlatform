@@ -52,7 +52,7 @@ submax.analysis <- function(submax.long.data, plot.path, extension = 'png', colo
     key = key,
     filename = file.path(
       plot.path,
-      generate.filename('digIT-EX', file.core = 'phase0b_submax', extension = extension)
+      generate.filename('digIT-EX', file.core = 'full_cohort_submax', extension = extension)
       )
     );
   }
