@@ -7,6 +7,7 @@ script.name <- 'daily_summary_physiological';
 data.folder <- Sys.getenv('DIGITX_HOME');
 if(data.folder == "") data.folder <- here::here('results');
 plot.path <- file.path(data.folder, 'plots', script.name);
+results.path <- file.path(data.folder, 'results', script.name);
 extension <- 'png';
 
 analysis.init(
@@ -30,6 +31,14 @@ analysis.init(
       daily.summary <- daily.summary[! daily.summary$patient %in% c('EX001', 'EX002', 'EX003'),]
     }
 
+    baseline.data <- read.table(
+      here::here('inst/data-raw/baseline_data.tsv'),
+      sep = '\t',
+      header = TRUE
+      );
+
+    daily.summary <- merge(daily.summary, baseline.data, by = 'patient', all.x = TRUE);
+
     daily.summary.max.study.day <- daily.summary[daily.summary$nday <= max.study.day, ];
 
     physiological.vars <- c(
@@ -50,21 +59,34 @@ analysis.init(
       'Diastolic BP'
       );
 
-    daily.summary.physio <- daily.summary.max.study.day[, physiological.vars];
+    physio.mods <- model.linear.daily.summary(daily.summary)
+    physio.mod.summary <- physio.mods$model.summary[physio.mods$model.summary$var.type == 'Physiological', ];
+    rownames(physio.mod.summary) <- physio.mod.summary$variable;
+    # Reorder variables
+    physio.mod.summary <- physio.mod.summary[physiological.vars, ];
 
-    physio.mods <- lapply(physiological.vars, function(v) {
-      formula <- as.formula(sprintf('scale(%s) ~ nday + (1 | patient)', v))
-      lmerTest::lmer(formula, data = daily.summary)
-      });
-    names(physio.mods) <- physiological.vars;
-
-    physio.mod.summary <- model_linear_daily_summary(daily.summary);
-    physio.mod.summary <- physio.mod.summary[physio.mod.summary$var.type == 'Physiological', ];
+    results.filename <- file.path(
+      plot.path,
+      generate.filename('digIT-EX', file.core = 'physiological_lmm_results', extension = 'tsv')
+    );
+    print(physio.mods$model.summary);
+    print(sprintf('Saving model results to: %s', results.filename));
+    write.table(
+      x = physio.mods$model.summary,
+      file = results.filename,
+      sep = '\t',
+      row.names = FALSE
+      );
 
     # Extract the p-values from the lmertest summary for nday coefficient
-    physio.mod.pvalues <- physio.mod.summary$pvalue;
+    physio.mod.pvalues <- physio.mod.summary$p_value;
+    names(physio.mod.pvalues) <- physio.mod.summary$variable;
+    p.value.ordering <- order(physio.mod.pvalues, decreasing = TRUE);
 
-    # Scale within each patient
+    # Only select the physiological variables
+    daily.summary.physio <- daily.summary.max.study.day[, physiological.vars];
+
+    # Scale within each patient for heatmap
     daily.summary.physio.scaled <- do.call(
       'rbind.data.frame',
       lapply(split(daily.summary.physio, daily.summary.max.study.day$patient), function(x) {
@@ -81,11 +103,9 @@ analysis.init(
       daily.summary.heatmap.mean <- as.data.frame(
         lapply(daily.summary.heatmap.mean, slider::slide_mean, before = 1, after = 1)
         );
-    }
+      }
 
-    p.value.ordering <- order(physio.mod.pvalues, decreasing = TRUE);
-
-    xat <- c(1, seq(7, 49, by = 7));
+    xat <- c(1, seq(7, max.study.day, by = 7));
     physio.heatmap <- create.heatmap(
       daily.summary.heatmap.mean[, p.value.ordering],
       clustering.method = 'none',
@@ -109,11 +129,6 @@ analysis.init(
 
     pvalue.barplot.data <- pvalue.barplot.data[p.value.ordering, ];
 
-    # effect.size.scaled <- round(pvalue.barplot.data$effect.size * 1000);
-    # effect.size.range <- range(effect.size.scaled);
-    #
-    # effect.size.colors <- colorRampPalette(c('darkorange1', 'dodgerblue2'))(diff(effect.size.range) + 1);
-    # actual.colors <- effect.size.colors[effect.size.scaled + abs(min(effect.size.scaled)) + 1];
     effect.colors <- ifelse(pvalue.barplot.data$effect.size > 0, 'darkorange1', 'dodgerblue2');
 
     pvalue.barplot <- create.barplot(
@@ -134,7 +149,7 @@ analysis.init(
 
     filename <- file.path(
       plot.path,
-      generate.filename('digIT-EX', file.core = 'daily_percentile_states', extension = extension)
+      generate.filename('digIT-EX', file.core = 'daily_phyisological_heatmap', extension = extension)
       );
     print(sprintf('Saving daily summary heatmap to: %s', filename));
     create.multipanelplot(
