@@ -8,20 +8,27 @@
 model.linear.daily.summary <- function(
   daily.summary,
   random.slopes = TRUE,
+  scale.dependent = TRUE,
   physiological.vars = c(
     'rest.hr.sleep.mean',
     'rest.cgm.sleep.mean',
     'mass',
-    'fat.proportion',
+    'fat.mass',
     'systolic',
     'diastolic'
   ),
-  state.vars = paste0("state.alt", c("Sleep", "Active", "Sedentary"))
+  state.vars = paste0("state.alt", c("Sleep", "Active", "Sedentary")),
+  adjust.vars = c('Age.at.Consent')
   ) {
+  adjust.vars.str <- paste0('+ ', adjust.vars, collapse = ' + ');
   mods <- lapply(c(state.vars, physiological.vars), function(v) {
-    formula.intercept <- as.formula(sprintf('scale(%s) ~ nday + Age.at.Consent + (1 | patient)', v));
+    v.dep <- v;
+    if(scale.dependent) {
+      v.dep <- sprintf('scale(%s)', v);
+      }
+    formula.intercept <- as.formula(sprintf('%s ~ nday %s + (1 | patient)', v.dep, adjust.vars.str));
     if(random.slopes) {
-      formula <- as.formula(sprintf('scale(%s) ~ nday + Age.at.Consent + (1 + scale(nday) || patient)', v));
+      formula <- as.formula(sprintf('%s ~ nday %s + (1 + scale(nday) || patient)', v.dep, adjust.vars.str));
       }
     else {
       formula <- formula.intercept;
@@ -39,7 +46,8 @@ model.linear.daily.summary <- function(
   mods.summary <- mods.summary[mods.summary$coefficient == "nday", ];
   mods.varcomp.summary <- daily.summary.varcomp.summary(mods);
 
-  mods.summary$qvalue <- p.adjust(mods.summary$p_value);
+  mods.summary$qvalue <- p.adjust(mods.summary$p.value);
+
   mods.summary$var.type <- ifelse(grepl('state\\.', mods.summary$variable), 'State', 'Physiological');
   mods.summary$variable <- c(state.vars, physiological.vars);
   list(
@@ -50,7 +58,7 @@ model.linear.daily.summary <- function(
 
 #' Create a summary data frame for the fixed effects of a set of daily summary models
 #' @param cohort.models Daily summary models for physiological/lifestyle state variables
-daily.summary.model.summary <- function(cohort.models) {
+daily.summary.model.summary <- function(cohort.models, level = 0.95) {
   do.call('rbind.data.frame', lapply(names(cohort.models), function(variable.name) {
     m <- cohort.models[[variable.name]];
     m.summary <- summary(m);
@@ -61,9 +69,15 @@ daily.summary.model.summary <- function(cohort.models) {
     if('df' %in% colnames(raw.coefs)) {
       raw.coefs$df <- NULL;
     }
-    colnames(raw.coefs) <- c('estimate', 'std_error', 't_value', 'p_value');
+    colnames(raw.coefs) <- c('estimate', 'std.error', 't.value', 'p.value');
     coef.df <- data.frame(raw.coefs, variable = variable.name);
     coef.df$coefficient <- rownames(coef.df);
+
+      # Get confidence interval for nday
+    nday.ci <- confint(m, level = level, parm = 'nday')['nday', ];
+    coef.df$nday.ci.lower <- nday.ci[1];
+    coef.df$nday.ci.upper <- nday.ci[2];
+    coef.df$alpha <- 1 - level;
     rownames(coef.df) <- NULL;
 
     coef.df;

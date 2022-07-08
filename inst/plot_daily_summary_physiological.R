@@ -22,30 +22,24 @@ analysis.init(
       header = TRUE
       );
 
-    phase0b_only <- FALSE;
-    moving.avg <- TRUE;
-
-    max.study.day <- 49;
-
-    if(phase0b_only) {
-      daily.summary <- daily.summary[! daily.summary$patient %in% c('EX001', 'EX002', 'EX003'),]
-    }
-
     baseline.data <- read.table(
       here::here('inst/data-raw/baseline_data.tsv'),
       sep = '\t',
       header = TRUE
       );
 
-    daily.summary <- merge(daily.summary, baseline.data, by = 'patient', all.x = TRUE);
+    moving.avg <- TRUE;
 
-    daily.summary.max.study.day <- daily.summary[daily.summary$nday <= max.study.day, ];
+    max.study.day <- 49;
+
+    daily.summary <- merge(daily.summary, baseline.data, by = 'patient', all.x = TRUE);
+    daily.summary.phase0b <- daily.summary[! daily.summary$patient %in% c('EX001', 'EX002', 'EX003'),];
 
     physiological.vars <- c(
       'rest.hr.sleep.mean',
       'rest.cgm.sleep.mean',
       'mass',
-      'fat.proportion',
+      'fat.mass',
       'systolic',
       'diastolic'
       );
@@ -54,113 +48,22 @@ analysis.init(
       'Resting HR',
       'Resting glucose',
       'Body mass',
-      '% Fat mass',
+      'Fat mass',
       'Systolic BP',
       'Diastolic BP'
       );
 
-    physio.mods <- model.linear.daily.summary(daily.summary)
-    physio.mod.summary <- physio.mods$model.summary[physio.mods$model.summary$var.type == 'Physiological', ];
-    rownames(physio.mod.summary) <- physio.mod.summary$variable;
-    # Reorder variables
-    physio.mod.summary <- physio.mod.summary[physiological.vars, ];
-
-    results.filename <- file.path(
-      plot.path,
-      generate.filename('digIT-EX', file.core = 'physiological_lmm_results', extension = 'tsv')
-    );
-    print(physio.mods$model.summary);
-    print(sprintf('Saving model results to: %s', results.filename));
-    write.table(
-      x = physio.mods$model.summary,
-      file = results.filename,
-      sep = '\t',
-      row.names = FALSE
+    full.cohort.models <- plot.daily.summary.physiological(
+      daily.summary,
+      physiological.vars = physiological.vars,
+      vars.nice.names = vars.nice.names
       );
 
-    # Extract the p-values from the lmertest summary for nday coefficient
-    physio.mod.pvalues <- physio.mod.summary$p_value;
-    names(physio.mod.pvalues) <- physio.mod.summary$variable;
-    p.value.ordering <- order(physio.mod.pvalues, decreasing = TRUE);
-
-    # Only select the physiological variables
-    daily.summary.physio <- daily.summary.max.study.day[, physiological.vars];
-
-    # Scale within each patient for heatmap
-    daily.summary.physio.scaled <- do.call(
-      'rbind.data.frame',
-      lapply(split(daily.summary.physio, daily.summary.max.study.day$patient), function(x) {
-        as.data.frame(lapply(x, function(y) as.numeric(scale(y))));
-      }))
-
-    daily.summary.heatmap.mean <- aggregate(
-      x = daily.summary.physio.scaled,
-      by = list(daily.summary.max.study.day$nday), FUN = function(x) {
-      mean(x, na.rm = TRUE)
-    })[, -1]
-
-    if(moving.avg) {
-      daily.summary.heatmap.mean <- as.data.frame(
-        lapply(daily.summary.heatmap.mean, slider::slide_mean, before = 1, after = 1)
-        );
-      }
-
-    xat <- c(1, seq(7, max.study.day, by = 7));
-    physio.heatmap <- create.heatmap(
-      daily.summary.heatmap.mean[, p.value.ordering],
-      clustering.method = 'none',
-      yaxis.lab = vars.nice.names[p.value.ordering],
-      xat = xat,
-      xaxis.lab = xat,
-      xaxis.rot = 0,
-      colourkey.labels.at = c(-0.5, 0, 0.5),
-      colourkey.labels = c('-0.5', '0', '0.5'),
-      yaxis.tck = c(1, 0),
-      xlab.label = 'Study day',
-      xlab.cex = 1.5,
-      colourkey.cex = 2
-      );
-
-    pvalue.barplot.data <- data.frame(
-      variable = factor(physiological.vars, levels = physiological.vars[p.value.ordering]),
-      pvalue = physio.mod.pvalues,
-      effect.size = physio.mod.summary$estimate
-      );
-
-    pvalue.barplot.data <- pvalue.barplot.data[p.value.ordering, ];
-
-    effect.colors <- ifelse(pvalue.barplot.data$effect.size > 0, 'darkorange1', 'dodgerblue2');
-
-    pvalue.barplot <- create.barplot(
-      formula = variable ~ -log10(pvalue),
-      data = pvalue.barplot.data,
-      col = effect.colors,
-      plot.horizontal = TRUE,
-      yaxis.lab = rep('', length(physiological.vars)),
-      xlab.label = expression('-log'['10']~'(p-value)'),
-      xlab.cex = 1.5,
-      yaxis.tck = 0,
-      xaxis.tck = 0,
-      abline.v = -log10(0.05),
-      abline.lty = 2,
-      abline.col = 'darkgrey',
-      ylab.label = ''
-      );
-
-    filename <- file.path(
-      plot.path,
-      generate.filename('digIT-EX', file.core = 'daily_phyisological_heatmap', extension = extension)
-      );
-    print(sprintf('Saving daily summary heatmap to: %s', filename));
-    create.multipanelplot(
-      list(physio.heatmap, pvalue.barplot),
-      layout.height = 1,
-      layout.width = 2,
-      x.spacing = 0,
-      plot.objects.widths = c(1, 0.25),
-      width = 14,
-      height = 8,
-      filename = filename
+    phase0b.models <- plot.daily.summary.physiological(
+      daily.summary.phase0b,
+      phase0b.only = TRUE,
+      physiological.vars = physiological.vars,
+      vars.nice.names = vars.nice.names
       );
     }
   );

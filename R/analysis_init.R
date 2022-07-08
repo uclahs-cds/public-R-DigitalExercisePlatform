@@ -6,9 +6,11 @@ analysis.init <- function(data.folder, script.name, split.stdout = TRUE, expr) {
 
   plot.path <- file.path(data.folder, 'plots', script.name);
   log.path <- file.path(data.folder, 'logs', script.name);
+  results.path <- file.path(data.folder, 'results', script.name);
 
   dir.create(plot.path, showWarnings = FALSE, recursive = TRUE);
   dir.create(log.path, showWarnings = FALSE, recursive = TRUE);
+  dir.create(results.path, showWarnings = FALSE, recursive = TRUE);
 
   cat('Script: ', script.name, '\n')
   cat('Writing log files to: ', log.path, '\n');
