@@ -20,11 +20,12 @@ analysis.init(
     perc.phase0a.long <- adherence.perc.phase0a;
     perc.phase0b.long <- adherence.perc.phase0b;
 
-    adherence.boxplot(
+    blah <- adherence.boxplot(
       x = perc.phase0a.long,
       plot.path = plot.path,
       extension = extension,
-      phase = 'phase0a'
+      phase = 'phase0a',
+      gotham.font = TRUE
       );
 
     adherence.boxplot(

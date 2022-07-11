@@ -1,8 +1,21 @@
+#' DigIT-x adherence plots
+#'
+#' @param x Adherence long data.
+#' @param plot.path
+#' @param extension
+#' @param phase
+#' @param gotham.font Should Gotham Medium font be used?
+#'
+#' @return
+#' @export
+#'
+#' @examples
 adherence.boxplot <- function(
   x,
   plot.path,
-  extension = 'png',
-  phase = c('phase0a', 'phase0b')
+  extension = c('png', 'pdf'),
+  phase = c('phase0a', 'phase0b'),
+  gotham.font = TRUE
   ) {
   phase <- match.arg(phase);
 
@@ -14,13 +27,15 @@ adherence.boxplot <- function(
 
   yat <- seq(40, 100, by = 10);
   ylimits <- c(35, 105);
-  yaxis.lab <- paste0(yat, '%');
+  yaxis.lab <- yat;
+  height <- 8;
+  width <- 12;
 
-  create.boxplot(
+  adherence.plot <- create.boxplot(
     formula = Percent ~ Variable.factor,
     data = x,
     add.stripplot = TRUE,
-    ylab.label = 'Adherence',
+    ylab.label = 'Adherence, %',
     yat = yat,
     yaxis.lab = yaxis.lab,
     ylimits = ylimits,
@@ -30,8 +45,20 @@ adherence.boxplot <- function(
     ylab.cex = 3,
     yaxis.cex = 2.5,
     ylab.axis.padding = 3,
-    height = 8,
-    width = 12,
-    filename = filename
-  );
-}
+    height = height,
+    width = width
+    );
+
+  if (gotham.font) {
+    adherence.plot <- replace.font(adherence.plot, font = 'iCiel Gotham Medium');
+    }
+
+  BoutrosLab.plotting.general::write.plot(
+    trellis.object = adherence.plot,
+    filename = filename,
+    height = height,
+    width = width
+    );
+
+  invisible(adherence.plot);
+  }
