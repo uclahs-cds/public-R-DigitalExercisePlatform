@@ -3,10 +3,10 @@ state.week.text <- function(
   daily.summary,
   max.study.day = 49
   ) {
-  state.week.text <- lapply(c("Sleep", "Active", "Sedentary"), function(v) {
-    colname <- sprintf("state.alt%s", v);
-    scatter.formula <- as.formula(sprintf("%s / 60 ~ nday", colname));
-    week.agg.formula <- as.formula(sprintf("%s ~ nweek", colname))
+  state.week.text <- lapply(c('Sleep', 'Active', 'Sedentary'), function(v) {
+    colname <- sprintf('state.alt%s', v);
+    scatter.formula <- as.formula(sprintf('%s / 60 ~ nday', colname));
+    week.agg.formula <- as.formula(sprintf('%s ~ nweek', colname))
     week.mean <- aggregate(week.agg.formula, daily.summary, mean)
     # Hours rather than minutes
     week.mean[[colname]] <- week.mean[[colname]] / 60
@@ -49,12 +49,12 @@ daily.summary.percentile.plot <- function(
 
   daily.summary.watch.on$patient_factor <- as.factor(daily.summary.watch.on$patient);
 
-  state.percentile.plots <- lapply(c("Sleep", "Active", "Sedentary"), function(v) {
-    colname <- sprintf("state.alt%s", v)
-    percentile.formula <- as.formula(sprintf("%s ~ as.factor(nday)", colname))
+  state.percentile.plots <- lapply(c('Sleep', 'Active', 'Sedentary'), function(v) {
+    colname <- sprintf('state.alt%s', v)
+    percentile.formula <- as.formula(sprintf('%s ~ as.factor(nday)', colname))
     max.study.day <- max(daily.summary.watch.on$nday)
 
-    agg.formula <- as.formula(sprintf("%s ~ nday", colname))
+    agg.formula <- as.formula(sprintf('%s ~ nday', colname))
     study.day.percentiles <- do.call(
       what = 'cbind.data.frame',
       args = aggregate(
@@ -70,7 +70,7 @@ daily.summary.percentile.plot <- function(
     study.day.percentiles[, -1] <- lapply(study.day.percentiles[, -1], slider::slide_mean, before = smooth.percentiles, after = smooth.percentiles)
 
     xat <- c(1, seq(7, max.study.day, by = 7))
-    if(v == 'Sedentary') {
+    if (v == 'Sedentary') {
       xaxis.lab <- xat
       xaxis.tck <- c(1, 0)
     } else {
@@ -79,7 +79,7 @@ daily.summary.percentile.plot <- function(
     }
     ylimits <- c(-1, ceiling(max(daily.summary.watch.on[[colname]] / 60, na.rm = TRUE) + 1));
 
-    agg.formula.hours <- as.formula(sprintf("%s / 60 ~ nday", colname));
+    agg.formula.hours <- as.formula(sprintf('%s / 60 ~ nday', colname));
     create.scatterplot(
       agg.formula.hours,
       data = daily.summary.watch.on,
@@ -169,23 +169,23 @@ daily.summary.boxplot <- function(
 
   daily.summary.watch.on$patient_factor <- as.factor(daily.summary.watch.on$patient)
 
-  state.boxplots <- lapply(c("Sleep", "Active", "Sedentary"), function(v) {
-    colname <- sprintf("state.alt%s", v)
-    boxplot.formula <- as.formula(sprintf("%s / 60 ~ as.factor(nday)", colname))
+  state.boxplots <- lapply(c('Sleep', 'Active', 'Sedentary'), function(v) {
+    colname <- sprintf('state.alt%s', v)
+    boxplot.formula <- as.formula(sprintf('%s / 60 ~ as.factor(nday)', colname))
     max.study.day <- max(daily.summary.watch.on$nday)
 
-    agg.formula <- as.formula(sprintf("%s ~ nday", colname))
+    agg.formula <- as.formula(sprintf('%s ~ nday', colname))
     study.day.mean <- aggregate(agg.formula, daily.summary.watch.on, mean)
     study.day.mean$ma5 <- slider::slide_mean(study.day.mean[[colname]], before = 2, after = 2) / 60
     study.day.mean$ma7 <- slider::slide_mean(study.day.mean[[colname]], before = 3, after = 3) / 60
 
-    week.agg.formula <- as.formula(sprintf("%s ~ nweek", colname))
+    week.agg.formula <- as.formula(sprintf('%s ~ nweek', colname))
     week.mean <- aggregate(week.agg.formula, daily.summary.watch.on, mean)
     # Hours rather than minutes
     week.mean[[colname]] <- week.mean[[colname]] / 60
 
     xat <- c(1, seq(7, max.study.day, by = 7))
-    if(v == 'Sedentary') {
+    if (v == 'Sedentary') {
       xaxis.lab <- xat
       xaxis.tck <- c(1, 0)
       } else {

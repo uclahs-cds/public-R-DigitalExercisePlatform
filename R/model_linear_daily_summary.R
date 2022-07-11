@@ -17,17 +17,17 @@ model.linear.daily.summary <- function(
     'systolic',
     'diastolic'
   ),
-  state.vars = paste0("state.alt", c("Sleep", "Active", "Sedentary")),
+  state.vars = paste0('state.alt', c('Sleep', 'Active', 'Sedentary')),
   adjust.vars = c('Age.at.Consent')
   ) {
   adjust.vars.str <- paste0('+ ', adjust.vars, collapse = ' + ');
   mods <- lapply(c(state.vars, physiological.vars), function(v) {
     v.dep <- v;
-    if(scale.dependent) {
+    if (scale.dependent) {
       v.dep <- sprintf('scale(%s)', v);
       }
     formula.intercept <- as.formula(sprintf('%s ~ nday %s + (1 | patient)', v.dep, adjust.vars.str));
-    if(random.slopes) {
+    if (random.slopes) {
       formula <- as.formula(sprintf('%s ~ nday %s + (1 + scale(nday) || patient)', v.dep, adjust.vars.str));
       }
     else {
@@ -35,7 +35,7 @@ model.linear.daily.summary <- function(
       }
 
     mod <- lmerTest::lmer(formula, data = daily.summary, REML = TRUE);
-    if(isSingular(mod)) {
+    if (isSingular(mod)) {
       mod <- lmerTest::lmer(formula.intercept, data = daily.summary, REML = TRUE);
       }
     return(mod);
@@ -43,7 +43,7 @@ model.linear.daily.summary <- function(
   names(mods) <- c(state.vars, physiological.vars);
 
   mods.summary <- daily.summary.model.summary(mods);
-  mods.summary <- mods.summary[mods.summary$coefficient == "nday", ];
+  mods.summary <- mods.summary[mods.summary$coefficient == 'nday', ];
   mods.varcomp.summary <- daily.summary.varcomp.summary(mods);
 
   mods.summary$qvalue <- p.adjust(mods.summary$p.value);
@@ -63,10 +63,10 @@ daily.summary.model.summary <- function(cohort.models, level = 0.95) {
     m <- cohort.models[[variable.name]];
     m.summary <- summary(m);
     raw.coefs <- as.data.frame(m.summary$coefficients);
-    # if(!("watch_on_minutes" %in% colnames(raw.coefs))) {
+    # if(!('watch_on_minutes' %in% colnames(raw.coefs))) {
     #   raw.coefs['watch_on_minutes', ] <- NA;
     #   }
-    if('df' %in% colnames(raw.coefs)) {
+    if ('df' %in% colnames(raw.coefs)) {
       raw.coefs$df <- NULL;
     }
     colnames(raw.coefs) <- c('estimate', 'std.error', 't.value', 'p.value');
@@ -101,14 +101,14 @@ daily.summary.varcomp.summary <- function(cohort.models) {
 
       varcomp.wide <- reshape(
         data = varcomp[, c('id', 'name', 'vcov', 'sdcor')],
-        idvar = "id",
-        timevar = "name",
-        direction = "wide"
+        idvar = 'id',
+        timevar = 'name',
+        direction = 'wide'
       );
       # Adjusted and conditional ICC
-      if(requireNamespace("performance", quietly = TRUE)) {
+      if (requireNamespace('performance', quietly = TRUE)) {
         icc.results <- performance::icc(m);
-        if(length(icc.results) > 1 && !is.na(icc.results)) {
+        if (length(icc.results) > 1 && !is.na(icc.results)) {
           varcomp.wide <- cbind.data.frame(varcomp.wide, c(icc.results));
           }
         }

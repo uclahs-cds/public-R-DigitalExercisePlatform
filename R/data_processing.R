@@ -9,7 +9,7 @@ adherence.to.long <- function(x, scale.percent = TRUE) {
     what = 'rbind.data.frame',
     args = lapply(names(x.percent), function(cname) {
       perc.col <- x.percent[[cname]];
-      if(!all(perc.col >= 0 & perc.col <= 1)) {
+      if (!all(perc.col >= 0 & perc.col <= 1)) {
         warning(sprintf('The value in percent column: %s are not all in the interval [0,1] ', cname));
         }
       new.cname <- gsub('\\.Percent', '', cname);
@@ -21,7 +21,7 @@ adherence.to.long <- function(x, scale.percent = TRUE) {
     })
   );
   x.percent.long$Percent <- as.numeric(x.percent.long$Percent);
-  if(scale.percent) {
+  if (scale.percent) {
     x.percent.long$Percent <- x.percent.long$Percent * 100;
     }
 

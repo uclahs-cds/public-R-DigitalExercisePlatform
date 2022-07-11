@@ -36,7 +36,7 @@ plot.daily.summary.physiological <- function(
   )) {
 
   phase0b.string <- '';
-  if(phase0b.only) {
+  if (phase0b.only) {
     phase0b.string <- '_phase0b';
     }
   physio.mods <- model.linear.daily.summary(
@@ -86,7 +86,7 @@ plot.daily.summary.physiological <- function(
     mean(x, na.rm = TRUE)
   })[, -1]
 
-  if(!is.null(moving.avg) && moving.avg > 0) {
+  if (!is.null(moving.avg) && moving.avg > 0) {
     daily.summary.heatmap.mean <- as.data.frame(
       lapply(daily.summary.heatmap.mean, slider::slide_mean, before = moving.avg, after = moving.avg)
       );

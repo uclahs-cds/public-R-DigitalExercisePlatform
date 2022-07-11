@@ -3,7 +3,7 @@ library(BoutrosLab.plotting.general);
 
 script.name <- 'cost_analysis';
 data.folder <- Sys.getenv('DIGITX_HOME');
-if(data.folder == "") data.folder <- here::here('results');
+if (data.folder == '') data.folder <- here::here('results');
 
 analysis.init(
   data.folder = data.folder,

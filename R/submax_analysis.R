@@ -1,16 +1,16 @@
 submax.analysis <- function(submax.long.data, plot.path, extension = 'png', color.points = FALSE) {
   t.test.results <- t.test(
-    x = submax.long.data$Time.to.submax[submax.long.data$Session == "BL"],
-    y = submax.long.data$Time.to.submax[submax.long.data$Session == "FU"],
+    x = submax.long.data$Time.to.submax[submax.long.data$Session == 'BL'],
+    y = submax.long.data$Time.to.submax[submax.long.data$Session == 'FU'],
     paired = TRUE,
-    alternative = "two.sided"
+    alternative = 'two.sided'
     );
   test.text.labels <- paste0('t-test p = ', round(t.test.results$p.value, 3));
 
   submax.long.data$Time.to.submax.minutes <- submax.long.data$Time.to.submax / 60;
 
   key <- NULL;
-  if(color.points) {
+  if (color.points) {
     key <- list(
       text =  list(
         lab = names(cancer.type.colors)
@@ -32,7 +32,7 @@ submax.analysis <- function(submax.long.data, plot.path, extension = 'png', colo
     Time.to.submax.minutes ~ as.factor(Session),
     data = submax.long.data,
     groups = submax.long.data$Study.ID,
-    col = if(color.points) submax.long.data$plot.color[submax.long.data$Session == "BL"] else 'black',
+    col = if (color.points) submax.long.data$plot.color[submax.long.data$Session == 'BL'] else 'black',
     group.specific.colouring = color.points,
     type = 'b',
     main.cex = 1.75,

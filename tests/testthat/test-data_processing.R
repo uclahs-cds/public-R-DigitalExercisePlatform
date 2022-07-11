@@ -1,4 +1,4 @@
-test_that("adherence data processing works", {
+test_that('adherence data processing works', {
   test.data <- data.frame(
     A.Percent = seq(0, 1, length.out = 5),
     B.Percent = 0.5,
