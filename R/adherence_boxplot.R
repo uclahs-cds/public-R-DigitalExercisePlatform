@@ -15,6 +15,7 @@ adherence.boxplot <- function(
   plot.path,
   extension = c('png', 'pdf'),
   phase = c('phase0a', 'phase0b'),
+  variable.names = NULL,
   gotham.font = TRUE
   ) {
   phase <- match.arg(phase);
@@ -37,6 +38,7 @@ adherence.boxplot <- function(
     add.stripplot = TRUE,
     ylab.label = 'Adherence, %',
     yat = yat,
+    xaxis.lab = if (!is.null(variable.names)) variable.names else levels(x$Variable.factor),
     yaxis.lab = yaxis.lab,
     ylimits = ylimits,
     xlab.label = '',

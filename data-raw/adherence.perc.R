@@ -14,9 +14,7 @@ adherence.perc.phase0b <- adherence.to.long(adherence.phase0b);
 
 # Order by median percentage in phase0b
 adherence.phase0b.perc.cols <- adherence.phase0b[, grepl('\\.Percent', colnames(adherence.phase0b))];
-adherence.order <- unique(adherence.perc.phase0b$Variable)[
-  order(unlist(lapply(adherence.phase0b.perc.cols, median, na.rm = TRUE)), decreasing = TRUE)
-  ];
+adherence.order <- c('Attendance', 'Watch', 'BP', 'Scale', 'Sleep');
 
 adherence.perc.phase0a$Variable.factor <- factor(
   adherence.perc.phase0a$Variable,
