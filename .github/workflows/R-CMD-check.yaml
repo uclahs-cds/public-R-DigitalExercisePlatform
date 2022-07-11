@@ -16,6 +16,6 @@ jobs:
          - uses: actions/checkout@v2
            with:
               path: DigITx
-         - run: Rscript -e "install.packages(c('here', 'plyr', 'performance'))"
+         - run: Rscript -e "install.packages(c('here', 'plyr', 'performance', 'BoutrosLab.plotting.general'))"
          - run: R CMD build --compact-vignettes="gs+qpdf" DigITx
          - run: R CMD check --as-cran --run-donttest DigITx_*.tar.gz

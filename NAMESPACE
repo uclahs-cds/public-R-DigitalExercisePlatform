@@ -1,1 +1,5 @@
 exportPattern("^[[:alpha:]]+")
+importFrom("stats", "aggregate", "as.formula", "confint", "p.adjust",
+           "quantile", "reshape", "t.test")
+importFrom("utils", "capture.output", "head", "object.size",
+           "sessionInfo", "write.table")
