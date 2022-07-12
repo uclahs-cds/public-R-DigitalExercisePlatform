@@ -1,4 +1,10 @@
-submax.analysis <- function(submax.long.data, plot.path, extension = 'png', color.points = FALSE) {
+submax.analysis <- function(
+  submax.long.data,
+  plot.path,
+  extension = 'png',
+  color.points = FALSE,
+  gotham.font = TRUE,
+  ...) {
   t.test.results <- t.test(
     x = submax.long.data$Time.to.submax[submax.long.data$Session == 'BL'],
     y = submax.long.data$Time.to.submax[submax.long.data$Session == 'FU'],
@@ -22,13 +28,20 @@ submax.analysis <- function(submax.long.data, plot.path, extension = 'png', colo
         cex = 0.75,
         col = unlist(cancer.type.colors)
         ),
+      fontfamily = gotham.font,
       border = TRUE,
       divide = 1,
       corner = c(0.05, 0.05)
       );
     }
 
-  create.scatterplot(
+  filename <- file.path(
+    plot.path,
+    generate.filename('digIT-EX', file.core = 'full_cohort_submax', extension = extension)
+    );
+  print(sprintf('Plotting to: %s', filename));
+
+  submax.plot <- create.scatterplot(
     Time.to.submax.minutes ~ as.factor(Session),
     data = submax.long.data,
     groups = submax.long.data$Study.ID,
@@ -47,12 +60,25 @@ submax.analysis <- function(submax.long.data, plot.path, extension = 'png', colo
     text.x = 2,
     text.y = 5,
     text.cex = 1,
-    resolution = 200,
     text.labels = test.text.labels,
+    resolution = 200,
     key = key,
-    filename = file.path(
-      plot.path,
-      generate.filename('digIT-EX', file.core = 'full_cohort_submax', extension = extension)
-      )
+    ...
     );
+
+  if (gotham.font) {
+    submax.plot <- replace.font(submax.plot, font = gotham.font);
+    }
+
+  height <- 6;
+  width <- 6;
+
+  BoutrosLab.plotting.general::write.plot(
+    trellis.object = submax.plot,
+    filename = filename,
+    height = height,
+    width = width
+    );
+
+  invisible(submax.plot);
   }
