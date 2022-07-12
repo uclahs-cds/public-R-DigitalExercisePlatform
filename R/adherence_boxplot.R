@@ -4,7 +4,7 @@
 #' @param plot.path
 #' @param extension
 #' @param phase
-#' @param gotham.font Should Gotham Medium font be used?
+#' @param use.gotham.font Should Gotham Medium font be used?
 #'
 #' @return
 #' @export
@@ -16,7 +16,7 @@ adherence.boxplot <- function(
   extension = c('png', 'pdf'),
   phase = c('phase0a', 'phase0b'),
   variable.names = NULL,
-  gotham.font = TRUE
+  use.gotham.font = TRUE
   ) {
   phase <- match.arg(phase);
 
@@ -51,8 +51,8 @@ adherence.boxplot <- function(
     width = width
     );
 
-  if (gotham.font) {
-    adherence.plot <- replace.font(adherence.plot, font = 'iCiel Gotham Medium');
+  if (use.gotham.font) {
+    adherence.plot <- replace.font(adherence.plot, font = gotham.font);
     }
 
   BoutrosLab.plotting.general::write.plot(
