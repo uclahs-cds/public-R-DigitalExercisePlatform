@@ -26,11 +26,12 @@ analysis.init(
       );
 
     # [! submax.long.data$Study.ID %in% c('EX001', 'EX002', 'EX003'), ]
-    submax.plot <- submax.analysis(
+    submax.analysis(
       submax.long.data = submax.long.data,
       plot.path = plot.path,
       color.points = TRUE,
-      extension = 'pdf'
+      use.gotham.font = TRUE,
+      extension = 'png'
       );
     }
   );

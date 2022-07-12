@@ -3,7 +3,7 @@ submax.analysis <- function(
   plot.path,
   extension = 'png',
   color.points = FALSE,
-  gotham.font = TRUE,
+  use.gotham.font = TRUE,
   ...) {
   t.test.results <- t.test(
     x = submax.long.data$Time.to.submax[submax.long.data$Session == 'BL'],
@@ -15,6 +15,7 @@ submax.analysis <- function(
 
   submax.long.data$Time.to.submax.minutes <- submax.long.data$Time.to.submax / 60;
 
+  fontfamily <- if (use.gotham.font) gotham.font else BoutrosLab.plotting.general::get.defaults(property = 'fontfamily');
   key <- NULL;
   if (color.points) {
     key <- list(
@@ -28,7 +29,7 @@ submax.analysis <- function(
         cex = 0.75,
         col = unlist(cancer.type.colors)
         ),
-      fontfamily = gotham.font,
+      fontfamily = fontfamily,
       border = TRUE,
       divide = 1,
       corner = c(0.05, 0.05)
@@ -56,23 +57,36 @@ submax.analysis <- function(
     xaxis.cex = 1.25,
     ylab.axis.padding = 3,
     xlab.label = '',
-    add.text = TRUE,
-    text.x = 2,
-    text.y = 5,
-    text.cex = 1,
-    text.labels = test.text.labels,
     resolution = 200,
     key = key,
     ...
     );
 
-  if (gotham.font) {
+  t.test.text <- latticeExtra::layer(
+    panel.text(
+      x = 2,
+      y = 5,
+      labels = labels,
+      cex = 1,
+      fontface = 'bold',
+      fontfamily = fontfamily
+      ),
+      # Needs to be passed in via data rather than directly to panel
+      data = list(
+        labels = test.text.labels,
+        fontfamily = fontfamily
+        ),
+      ...
+    );
+
+  if (use.gotham.font) {
     submax.plot <- replace.font(submax.plot, font = gotham.font);
     }
 
   height <- 6;
   width <- 6;
 
+  submax.plot <- submax.plot + t.test.text;
   BoutrosLab.plotting.general::write.plot(
     trellis.object = submax.plot,
     filename = filename,

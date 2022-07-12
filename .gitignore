@@ -8,6 +8,9 @@
 *.Rproj*
 .Rproj.user
 
+# Docs
+*.Rd
+
 # Temp data files
 data/
 inst/data-raw/

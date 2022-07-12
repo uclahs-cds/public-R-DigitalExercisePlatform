@@ -38,12 +38,14 @@ state.week.text <- function(
 #' Percentile plot
 #' @export
 daily.summary.percentile.plot <- function(
-    daily.summary,
-    plot.path,
-    extension = 'png',
-    max.study.day = 49,
-    watch.on.min = 1440 - 180,
-    smooth.percentiles = 1
+  daily.summary,
+  plot.path,
+  extension = 'png',
+  max.study.day = 49,
+  watch.on.min = 1440 - 180,
+  smooth.percentiles = 1,
+  use.gotham.font = TRUE,
+  mean.line = FALSE
   ) {
   daily.summary.watch.on <- daily.summary[with(daily.summary, nday <= max.study.day & watch.on.minutes > watch.on.min), ];
 
@@ -80,7 +82,8 @@ daily.summary.percentile.plot <- function(
     ylimits <- c(-1, ceiling(max(daily.summary.watch.on[[colname]] / 60, na.rm = TRUE) + 1));
 
     agg.formula.hours <- as.formula(sprintf('%s / 60 ~ nday', colname));
-    create.scatterplot(
+
+    lifestyle.plot <- create.scatterplot(
       agg.formula.hours,
       data = daily.summary.watch.on,
       col = 'darkgrey',
@@ -92,7 +95,10 @@ daily.summary.percentile.plot <- function(
       ylimits = ylimits,
       ylab.cex = 1.75,
       xlab.label = '',
-      ylab.label = v
+      ylab.label = v,
+      abline.v = c(1, seq(7, max.study.day, by = 7)),
+      abline.lty = 2,
+      abline.col = 'grey'
       ) +
     create.polygonplot(
       NA ~ nday,
@@ -115,45 +121,71 @@ daily.summary.percentile.plot <- function(
       alpha = 0.5,
       border.col = 'transparent',
       grid.col = 'transparent'
-     ) +
-    create.scatterplot(
-      as.formula(paste0(colname, '.mean ~ nday')),
-      data = study.day.percentiles,
-      type = 'l',
-      col = simplified.state.colour.scheme[[v]],
-      lwd = 3,
-      abline.v = c(1, seq(7, max.study.day, by = 7)),
-      abline.lty = 2,
-      abline.col = 'grey'
-      );
+     )
+
+    if (mean.line) {
+      lifestyle.plot <- lifestyle.plot +
+        create.scatterplot(
+          as.formula(paste0(colname, '.mean ~ nday')),
+          data = study.day.percentiles,
+          type = 'l',
+          col = simplified.state.colour.scheme[[v]],
+          lwd = 3
+          );
+      }
+
+    lifestyle.plot;
     });
 
   state.week.text <- state.week.text(daily.summary.watch.on, max.study.day);
 
-  create.multipanelplot(
-    plot.objects = list(
+  width <- 18;
+  height <- 14;
+  filename <- file.path(
+    plot.path,
+    generate.filename('digIT-EX', file.core = 'daily_percentile_states', extension = extension)
+    );
+  print(sprintf('Plotting to: %s', filename));
+
+  plot.objects <- list(
       state.week.text[[1]],
       state.percentile.plots[[1]],
       state.week.text[[2]],
       state.percentile.plots[[2]],
       state.week.text[[3]],
       state.percentile.plots[[3]]
-    ),
+    );
+
+  if (use.gotham.font) {
+    plot.objects <- replace.font(plot.objects, font = gotham.font);
+    }
+
+  percentile.plot <- create.multipanelplot(
+    plot.objects = plot.objects,
     plot.objects.heights = rep(c(0.5, 1), 3),
     layout.width = 1,
     layout.height = 6,
-    resolution = 400,
-    width = 18,
-    height = 14,
+    resolution = 600,
+    width = width,
+    height = height,
     y.spacing = -0.5,
     ylab.axis.padding = 3,
     ylab.label = 'Hours',
-    xlab.label = 'Study day',
-    filename = file.path(
-      plot.path,
-      generate.filename('digIT-EX', file.core = 'daily_percentile_states', extension = extension)
-      )
+    xlab.label = 'Study day'
     );
+
+  if (use.gotham.font) {
+    percentile.plot <- replace.font(percentile.plot, font = 'iCiel Gotham Medium');
+    }
+
+  BoutrosLab.plotting.general::write.plot(
+    trellis.object = percentile.plot,
+    filename = filename,
+    height = height,
+    width = width
+    );
+
+  invisible(percentile.plot);
   }
 
 #' @export

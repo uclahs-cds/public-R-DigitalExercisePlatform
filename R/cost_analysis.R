@@ -8,7 +8,7 @@ plot.study.hours <- function(
   cost.data,
   plot.path,
   extension,
-  gotham.font = TRUE,
+  use.gotham.font = TRUE,
   ...) {
   digitx.hours <- cbind(cost.data[, c('Patient', 'patient.id', 'Digitx.Time.total.hrs')], study = 1);
   colnames(digitx.hours) <- c('Patient', 'patient.id', 'hours', 'study');
@@ -40,8 +40,8 @@ plot.study.hours <- function(
     ...
     );
 
-  if (gotham.font) {
-    hours.plot <- replace.font(hours.plot, font = 'iCiel Gotham Medium');
+  if (use.gotham.font) {
+    hours.plot <- replace.font(hours.plot, font = gotham.font);
     }
 
   BoutrosLab.plotting.general::write.plot(
@@ -62,7 +62,7 @@ plot.total.cost <- function(
   cost.data,
   plot.path,
   extension,
-  gotham.font = TRUE,
+  use.gotham.font = TRUE,
   ...) {
   phase.0b.costs <- cbind(cost.data[cost.data$phase0b, 'Total.Cost', drop = FALSE], group = 1);
   # Add the DigITx costs as '0'
@@ -87,8 +87,8 @@ plot.total.cost <- function(
     ...
     );
 
-  if (gotham.font) {
-    cost.plot <- replace.font(cost.plot, font = 'iCiel Gotham Medium');
+  if (use.gotham.font) {
+    cost.plot <- replace.font(cost.plot, font = gotham.font);
     }
 
   BoutrosLab.plotting.general::write.plot(
@@ -97,6 +97,8 @@ plot.total.cost <- function(
     height = height,
     width = width
     );
+
+  invisible(cost.plot);
   }
 
 #' Full cost/hour analysis

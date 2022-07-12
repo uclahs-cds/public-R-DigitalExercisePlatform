@@ -19,7 +19,9 @@ analysis.init(
 
     daily.summary.percentile.plot(
       daily.summary = daily.summary,
-      plot.path = plot.path
+      plot.path = plot.path,
+      use.gotham.font = TRUE,
+      extension = 'png'
       );
     }
-);
+  );
