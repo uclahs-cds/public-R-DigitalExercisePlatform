@@ -1,3 +1,14 @@
+#' Runs the submax t-test analysis and plotting
+#'
+#' @param submax.long.data data frame with columns Session (values BL/FU), Time.to.submax, Study.ID (patient id)
+#' @param plot.path path where plots should be plotted
+#' @param extension extension for the plots
+#' @param color.points Should the point/lines be colored according to the Cancer.Type column?
+#' @param use.gotham.font Should Gotham font be used?
+#' @param ... Additional parameters for create.scatterplot
+#'
+#' @return invisible submax.plot
+#' @export
 submax.analysis <- function(
   submax.long.data,
   plot.path,
@@ -5,13 +16,17 @@ submax.analysis <- function(
   color.points = FALSE,
   use.gotham.font = TRUE,
   ...) {
+  bl.submax <- submax.long.data$Time.to.submax[submax.long.data$Session == 'BL'];
+  fu.submax <- submax.long.data$Time.to.submax[submax.long.data$Session == 'FU'];
+  submax.diff <- fu.submax - bl.submax;
   t.test.results <- t.test(
-    x = submax.long.data$Time.to.submax[submax.long.data$Session == 'BL'],
-    y = submax.long.data$Time.to.submax[submax.long.data$Session == 'FU'],
+    x = fu.submax,
+    y = bl.submax,
     paired = TRUE,
     alternative = 'two.sided'
     );
-  test.text.labels <- paste0('t-test p = ', round(t.test.results$p.value, 3));
+
+  cohens.d <- lsr::cohensD(fu.submax, bl.submax, method = 'paired');
 
   submax.long.data$Time.to.submax.minutes <- submax.long.data$Time.to.submax / 60;
 
@@ -62,19 +77,29 @@ submax.analysis <- function(
     ...
     );
 
+  t.test.ci <- t.test.results$conf.int;
+  t.test.estimate <- unname(t.test.results$estimate);
+  test.text.labels <- c(
+    sprintf('t-test p = %.3f', t.test.results$p.value),
+    sprintf('mean difference (seconds): %.1f', t.test.estimate),
+    sprintf('95%% CI [%.1f, %.1f]', t.test.ci[1], t.test.ci[2]),
+    sprintf("Cohen's d = %.2f", cohens.d)
+    );
+
   t.test.text <- latticeExtra::layer(
     panel.text(
       x = 2,
-      y = 5,
-      labels = labels,
-      cex = 1,
+      y = .y,
+      labels = .labels,
+      cex = 0.85,
       fontface = 'bold',
-      fontfamily = fontfamily
+      fontfamily = .fontfamily
       ),
       # Needs to be passed in via data rather than directly to panel
       data = list(
-        labels = test.text.labels,
-        fontfamily = fontfamily
+        .labels = test.text.labels,
+        .fontfamily = fontfamily,
+        .y = 7 - seq_along(test.text.labels) * 0.5
         ),
       ...
     );

@@ -17,15 +17,12 @@ analysis.init(
       header = TRUE
       );
 
-    # submax.data.phase0b <- submax.data[! submax.data$Study.ID %in% c('EX001', 'EX002', 'EX003'), ];
-
     submax.long.data <- read.table(
       here::here('inst/data-raw/submax_long.tsv'),
       sep = '\t',
       header = TRUE
       );
 
-    # [! submax.long.data$Study.ID %in% c('EX001', 'EX002', 'EX003'), ]
     submax.analysis(
       submax.long.data = submax.long.data,
       plot.path = plot.path,

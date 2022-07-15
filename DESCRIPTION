@@ -19,5 +19,6 @@ Imports:
     BoutrosLab.plotting.general,
     here,
     plyr,
-    lattice
+    lattice,
+    lsr
 RoxygenNote: 7.1.1
