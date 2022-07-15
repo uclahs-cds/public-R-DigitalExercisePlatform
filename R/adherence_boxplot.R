@@ -26,8 +26,8 @@ adherence.boxplot <- function(
     );
   print(sprintf('Plotting to: %s', filename));
 
-  yat <- seq(40, 100, by = 10);
-  ylimits <- c(35, 105);
+  yat <- seq(0, 100, by = 20);
+  ylimits <- c(-5, 105);
   yaxis.lab <- yat;
   height <- 8;
   width <- 12;
