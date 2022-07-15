@@ -6,11 +6,10 @@
 #' @param random.slopes
 #' @param moving.avg
 #' @param vars.nice.names
+#' @param use.gotham.font Should gotham font be used?
 #'
 #' @return
 #' @export
-#'
-#' @examples
 plot.daily.summary.physiological <- function(
   daily.summary,
   max.study.day = 49,
@@ -18,6 +17,7 @@ plot.daily.summary.physiological <- function(
   random.slopes = TRUE,
   moving.avg = 1,
   scale.dependent = TRUE,
+  use.gotham.font = TRUE,
   physiological.vars = c(
     'rest.hr.sleep.mean',
     'rest.cgm.sleep.mean',
@@ -118,24 +118,6 @@ plot.daily.summary.physiological <- function(
 
   pvalue.effectsize.data <- pvalue.effectsize.data[p.value.ordering, ];
 
-  # effect.colors <- ifelse(pvalue.effectsize.data$effect.size > 0, 'darkorange1', 'dodgerblue2');
-  #
-  # pvalue.barplot <- create.barplot(
-  #   formula = variable ~ -log10(pvalue),
-  #   data = pvalue.effectsize.data,
-  #   col = effect.colors,
-  #   plot.horizontal = TRUE,
-  #   yaxis.lab = rep('', length(physiological.vars)),
-  #   xlab.label = expression('-log'['10']~'(p-value)'),
-  #   xlab.cex = 1.5,
-  #   yaxis.tck = 0,
-  #   xaxis.tck = 0,
-  #   abline.v = -log10(0.05),
-  #   abline.lty = 2,
-  #   abline.col = 'darkgrey',
-  #   ylab.label = ''
-  #   );
-
   pvalue.effectsize.data[, -c(1,2)] <- pvalue.effectsize.data[, -c(1,2)] * 49;
   effect.size.segplot <- create.segplot(
     formula = variable ~ nday.ci.lower + nday.ci.upper,
@@ -161,16 +143,28 @@ plot.daily.summary.physiological <- function(
     plot.path,
     generate.filename('digIT-EX', file.core = sprintf('daily_phyisological_heatmap%s', phase0b.string), extension = extension)
     );
+  width <- 16;
+  height <- 8;
+
   print(sprintf('Saving daily summary heatmap to: %s', filename));
-  create.multipanelplot(
+  daily.summary.multiplot <- create.multipanelplot(
     list(physio.heatmap, effect.size.segplot),
     layout.height = 1,
     layout.width = 2,
     x.spacing = 0,
     plot.objects.widths = c(1, 0.35),
-    width = 16,
-    height = 8,
-    filename = filename
+    );
+
+  if (use.gotham.font) {
+    daily.summary.multiplot <- replace.font(daily.summary.multiplot, font = gotham.font);
+    }
+
+
+  BoutrosLab.plotting.general::write.plot(
+    trellis.object = daily.summary.multiplot,
+    filename = filename,
+    height = height,
+    width = width
     );
 
   return(physio.mods);

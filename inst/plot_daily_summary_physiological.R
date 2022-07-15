@@ -56,14 +56,16 @@ analysis.init(
     full.cohort.models <- plot.daily.summary.physiological(
       daily.summary,
       physiological.vars = physiological.vars,
-      vars.nice.names = vars.nice.names
+      vars.nice.names = vars.nice.names,
+      use.gotham.font = TRUE
       );
 
     phase0b.models <- plot.daily.summary.physiological(
       daily.summary.phase0b,
       phase0b.only = TRUE,
       physiological.vars = physiological.vars,
-      vars.nice.names = vars.nice.names
+      vars.nice.names = vars.nice.names,
+      use.gotham.font = TRUE
       );
     }
   );
