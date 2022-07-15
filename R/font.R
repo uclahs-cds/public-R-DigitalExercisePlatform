@@ -5,12 +5,12 @@ gotham.font <- 'iCiel Gotham Medium';
 #'
 #' @param x BPG plot
 #' @return Same BPG plot but with all fonts replaced with Gotham Medium
-replace.font <- function(x, font = 'iCiel Gotham Medium') {
+replace.font <- function(x, font = gotham.font) {
+  # Get the same default font
+  default.fontfamily <- BoutrosLab.plotting.general::get.defaults(property = 'fontfamily');
   .replace.single <- function(y) {
-    # Get the same default font
-    default.fontfamily <- BoutrosLab.plotting.general::get.defaults(property = 'fontfamily');
-    if (length(y) == 1 && typeof(y) == 'character' && y == default.fontfamily) {
-      return(gotham.font);
+    if (length(y) == 1 && y == default.fontfamily) {
+      return(font);
       }
     else {
       return(y);
