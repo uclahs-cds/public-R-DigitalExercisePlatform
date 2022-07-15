@@ -8,6 +8,7 @@ plot.study.hours <- function(
   cost.data,
   plot.path,
   extension,
+  add.t.test.text = TRUE,
   use.gotham.font = TRUE,
   ...) {
   digitx.hours <- cbind(cost.data[, c('Patient', 'patient.id', 'Digitx.Time.total.hrs')], study = 1);
@@ -42,6 +43,21 @@ plot.study.hours <- function(
 
   if (use.gotham.font) {
     hours.plot <- replace.font(hours.plot, font = gotham.font);
+    }
+
+  if (add.t.test.text) {
+    panel.x <- 1;
+    panel.y <- 25;
+    t.test.layer <- t.test.plot.text(
+      x = cost.data$Digitx.Time.total.hrs,
+      y = cost.data$Traditional.Time.total.hrs,
+      panel.x = panel.x,
+      panel.y = panel.y,
+      use.gotham.font,
+      paired = FALSE
+      );
+
+    hours.plot <- hours.plot + t.test.layer;
     }
 
   BoutrosLab.plotting.general::write.plot(

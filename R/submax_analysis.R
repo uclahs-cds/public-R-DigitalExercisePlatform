@@ -18,15 +18,6 @@ submax.analysis <- function(
   ...) {
   bl.submax <- submax.long.data$Time.to.submax[submax.long.data$Session == 'BL'];
   fu.submax <- submax.long.data$Time.to.submax[submax.long.data$Session == 'FU'];
-  submax.diff <- fu.submax - bl.submax;
-  t.test.results <- t.test(
-    x = fu.submax,
-    y = bl.submax,
-    paired = TRUE,
-    alternative = 'two.sided'
-    );
-
-  cohens.d <- lsr::cohensD(fu.submax, bl.submax, method = 'paired');
 
   submax.long.data$Time.to.submax.minutes <- submax.long.data$Time.to.submax / 60;
 
@@ -76,6 +67,15 @@ submax.analysis <- function(
     key = key,
     ...
     );
+
+  t.test.results <- t.test(
+    x = fu.submax,
+    y = bl.submax,
+    paired = TRUE,
+    alternative = 'two.sided'
+    );
+
+  cohens.d <- lsr::cohensD(fu.submax, bl.submax, method = 'paired');
 
   t.test.ci <- t.test.results$conf.int;
   t.test.estimate <- unname(t.test.results$estimate);
