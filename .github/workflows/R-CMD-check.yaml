@@ -15,6 +15,7 @@ jobs:
       steps:
          - uses: actions/checkout@v2
            with:
-              path: BoutrosLabTemplate
-         - run: R CMD build --compact-vignettes="gs+qpdf" BoutrosLabTemplate
-         - run: R CMD check --as-cran --run-donttest BoutrosLabTemplate_*.tar.gz
+              path: DigITx
+         - run: Rscript -e "install.packages(c('here', 'plyr', 'performance', 'BoutrosLab.plotting.general', 'lsr'))"
+         - run: R CMD build --compact-vignettes="gs+qpdf" DigITx
+         - run: R CMD check --as-cran --run-donttest DigITx_*.tar.gz

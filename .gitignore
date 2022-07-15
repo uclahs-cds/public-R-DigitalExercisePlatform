@@ -7,3 +7,13 @@
 .RData
 *.Rproj*
 .Rproj.user
+
+# Docs
+*.Rd
+
+..Rcheck/
+*.tar.gz
+
+# Temp data files
+data/
+inst/data-raw/

@@ -1,4 +1,4 @@
-library(testthat);
-library(BoutrosLabTemplate);
+library(testthat)
+library(DigITx)
 
-test_check('BoutrosLabTemplate');
+test_check('DigITx')
