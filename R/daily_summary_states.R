@@ -159,7 +159,7 @@ daily.summary.percentile.plot <- function(
 
     # Allow text to be written outside of the panel
     # Needed for weekly mean text
-    lifestyle.plot$par.settings$clip = list(panel = FALSE);
+    lifestyle.plot$par.settings$clip <- list(panel = FALSE);
 
     lifestyle.plot;
     });

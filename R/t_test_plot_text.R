@@ -15,7 +15,7 @@ t.test.plot.text <- function(
     use.gotham.font = TRUE,
     ...
     ) {
-  method <- if(paired) 'paired' else 'pooled'
+  method <- if (paired) 'paired' else 'pooled'
 
   t.test.results <- stats::t.test(
     paired = paired,
