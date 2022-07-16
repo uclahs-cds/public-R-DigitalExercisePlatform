@@ -14,7 +14,7 @@ state.week.text <- function(
       y = .text.y,
       fontfamily = gotham.font,
       labels = .labels,
-      cex = 1.3
+      cex = 1.5
       ),
       data = list(
         # I don't really know how layer environment works
