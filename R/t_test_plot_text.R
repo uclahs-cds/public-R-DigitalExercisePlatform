@@ -58,7 +58,7 @@ t.test.plot.text <- function(
       x = .panel.x,
       y = .panel.y,
       labels = .labels,
-      cex = 0.75,
+      cex = 0.9,
       fontface = 'bold',
       fontfamily = .fontfamily
       ),

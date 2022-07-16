@@ -46,7 +46,7 @@ plot.study.hours <- function(
     }
 
   if (add.t.test.text) {
-    panel.x <- 1;
+    panel.x <- 1.1;
     panel.y <- 25;
     t.test.layer <- t.test.plot.text(
       x = cost.data$Digitx.Time.total.hrs,
