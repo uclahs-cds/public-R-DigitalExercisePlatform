@@ -55,7 +55,7 @@ daily.summary.percentile.plot <- function(
     week.mean[[colname]] <- week.mean[[colname]] / 60;
 
     text.xat <- seq(3.5, max.study.day, by = 7);
-    text.labels <- paste0('Mean: ', round(week.mean[[colname]], 1));
+    text.labels <- sprintf('Mean: %.01f', week.mean[[colname]]);
 
     agg.formula <- as.formula(sprintf('%s ~ nday', colname))
     study.day.percentiles <- do.call(
@@ -96,7 +96,7 @@ daily.summary.percentile.plot <- function(
       ylimits = ylimits,
       ylab.cex = 1.75,
       xlab.label = '',
-      ylab.label = v,
+      ylab.label = paste0(v, ', Hours'),
       abline.v = c(1, seq(7, max.study.day, by = 7)),
       abline.lty = 2,
       abline.col = 'grey',
@@ -191,8 +191,6 @@ daily.summary.percentile.plot <- function(
     width = width,
     height = height,
     y.spacing = 0,
-    ylab.axis.padding = 3,
-    ylab.label = 'Hours',
     xlab.label = 'Study day'
     );
 
