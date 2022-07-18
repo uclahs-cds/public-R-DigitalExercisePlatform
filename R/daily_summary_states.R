@@ -36,7 +36,8 @@ daily.summary.percentile.plot <- function(
   watch.on.min = 1440 - 180,
   smooth.percentiles = 1,
   use.gotham.font = TRUE,
-  mean.line = FALSE
+  mean.line = FALSE,
+  add.week.text = FALSE
   ) {
   daily.summary.watch.on <- daily.summary[with(daily.summary, nday <= max.study.day & watch.on.minutes > watch.on.min), ];
 
@@ -112,11 +113,14 @@ daily.summary.percentile.plot <- function(
     # Add the text at the same relative distance above plot
     text.y <- ylimits[2] + (ylimits[2] - ylimits[1]) * 0.05;
 
-    # Add the gotham font weekly text
-    lifestyle.plot <- lifestyle.plot + state.week.text(
+    if(add.week.text) {
+      # Add the gotham font weekly text
+      lifestyle.plot <- lifestyle.plot + state.week.text(
       text.labels,
       text.x = text.xat,
       text.y = text.y);
+      }
+
 
     # Add the 5% to 95% percentiles
     lifestyle.plot <- lifestyle.plot +
