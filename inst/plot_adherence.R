@@ -23,13 +23,15 @@ analysis.init(
     perc.phase0a.long <- perc.phase0a.long[perc.phase0a.long$Variable != 'Sleep', ];
     perc.phase0b.long <- perc.phase0b.long[perc.phase0b.long$Variable != 'Sleep', ];
 
+    variable.names <- c('Exercise\nTherapy', 'Watch', 'Blood\nPressure', 'Scale');
+
     adherence.boxplot(
       x = perc.phase0a.long,
       plot.path = plot.path,
       extension = extension,
       phase = 'phase0a',
       use.gotham.font = TRUE,
-      variable.names = c('Exercise\nAttendance', 'Watch', 'Blood\nPressure', 'Scale')
+      variable.names = variable.names
       );
 
     adherence.boxplot(
@@ -38,7 +40,7 @@ analysis.init(
       extension = extension,
       phase = 'phase0b',
       use.gotham.font = TRUE,
-      variable.names = c('Exercise\nAttendance', 'Watch', 'Blood\nPressure', 'Scale')
+      variable.names = variable.names
       );
     }
   );

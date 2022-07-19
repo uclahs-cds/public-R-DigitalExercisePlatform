@@ -126,7 +126,7 @@ cost.hour.analysis <- function(cost.data, plot.path, extension = 'png', color.po
     ylab.cex = 1.75,
     ylab.axis.padding = 3,
     points.col = if (color.points) cost.data$plot.color else 'darkgrey',
-    xaxis.lab = c('Traditional', 'DigITx'),
+    xaxis.lab = c('Virtual\nTwin', 'DEXP'),
     extension = extension
     );
 
