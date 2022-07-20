@@ -123,7 +123,7 @@ cost.hour.analysis <- function(cost.data, plot.path, extension = 'png', color.po
   # BPG Parameters
   bpg.shared <- list(
     points.cex = 1,
-    ylab.cex = 1.75,
+    ylab.cex = 1.7,
     ylab.axis.padding = 3,
     points.col = if (color.points) cost.data$plot.color else 'darkgrey',
     xaxis.lab = c('Virtual\nTwin', 'DEXP'),
