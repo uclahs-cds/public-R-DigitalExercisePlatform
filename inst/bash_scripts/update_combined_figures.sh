@@ -21,7 +21,7 @@ egrep -ho "\"(/.*?png)\"" "$1/latest_figures/combined_figures2_3.svg" "$1/latest
 /Applications/Inkscape.app/Contents/MacOS/inkscape $1/latest_figures/combined_figures4.svg -d 1200 $1/latest_figures/combined_figures4.pdf
 
 # Merge pdfs into single pdf
-convert -density 600 $1/latest_figures/combined_figures2_3.pdf $1/latest_figures/combined_figures4.pdf $1/latest_figures/${TODAY}_DEXP_combined_figures_3_4_5.pdf
+convert -density 300 $1/latest_figures/combined_figures2_3.pdf $1/latest_figures/combined_figures4.pdf $1/latest_figures/${TODAY}_DEXP_combined_figures_3_4_5.pdf
 
 # Zip up the latest files
 zip -r $1/latest_figures/${TODAY}_DEXP-figures.zip $1/latest_figures/${TODAY}_digIT*.png
