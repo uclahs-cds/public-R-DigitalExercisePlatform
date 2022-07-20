@@ -95,7 +95,7 @@ daily.summary.percentile.plot <- function(
       xaxis.tck = xaxis.tck,
       xlimits = c(0, max.study.day + 1),
       ylimits = ylimits,
-      ylab.cex = 1.75,
+      ylab.cex = 2,
       xlab.label = '',
       ylab.label = paste0(v, ', Hours'),
       abline.v = c(1, seq(7, max.study.day, by = 7)),
