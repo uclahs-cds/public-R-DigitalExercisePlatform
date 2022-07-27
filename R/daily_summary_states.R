@@ -113,7 +113,7 @@ daily.summary.percentile.plot <- function(
     # Add the text at the same relative distance above plot
     text.y <- ylimits[2] + (ylimits[2] - ylimits[1]) * 0.05;
 
-    if(add.week.text) {
+    if (add.week.text) {
       # Add the gotham font weekly text
       lifestyle.plot <- lifestyle.plot + state.week.text(
       text.labels,

@@ -18,9 +18,9 @@ analysis.init(
       }
 
     plot.path <- file.path(data.folder, 'plots');
-    update_figures_script <- system.file('bash_scripts', 'update_combined_figures.sh', package = "DigITx");
-    update_figures_script <- paste(update_figures_script, plot.path);
-    print(paste0('Running command: ', update_figures_script))
-    system(update_figures_script);
+    update.figures.script <- system.file('bash_scripts', 'update_combined_figures.sh', package = 'DigITx');
+    update.figures.script <- paste(update.figures.script, plot.path);
+    print(paste0('Running command: ', update.figures.script))
+    system(update.figures.script);
     }
   )
