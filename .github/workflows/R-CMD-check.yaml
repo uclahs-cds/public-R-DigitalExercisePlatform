@@ -19,7 +19,7 @@ jobs:
         with:
           extra-packages: |
             any::rcmdcheck
-            uclahs-cds/private-R-BoutrosLab-statistics-general@9d33f65a
+            any::devtools
           needs: check
       - name: Document roxygen2
         run: devtools::document()
