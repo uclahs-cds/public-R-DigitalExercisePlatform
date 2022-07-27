@@ -20,6 +20,9 @@ jobs:
           extra-packages: |
             any::rcmdcheck
           needs: check
+      - name: Document roxygen2
+        run: devtools::document()
+        shell: Rscript {0}
       - uses: r-lib/actions/check-r-package@v2
         with:
           args: 'c("--no-manual", "--as-cran")'
