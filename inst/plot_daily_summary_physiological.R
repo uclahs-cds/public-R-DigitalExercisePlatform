@@ -53,14 +53,14 @@ analysis.init(
       'Diastolic BP'
       );
 
-    full.cohort.models <- plot.daily.summary.physiological(
+    full.cohort.models <- daily.summary.physiological.plot(
       daily.summary,
       physiological.vars = physiological.vars,
       vars.nice.names = vars.nice.names,
       use.gotham.font = TRUE
       );
 
-    phase0b.models <- plot.daily.summary.physiological(
+    phase0b.models <- daily.summary.physiological.plot(
       daily.summary.phase0b,
       phase0b.only = TRUE,
       physiological.vars = physiological.vars,

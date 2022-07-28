@@ -1,10 +1,14 @@
 #' Creates the estimated study hours plot for DigITx
 
 #' @param cost.data the cost data frame.
+#' @param plot.path path to the plot output
 #' @param extension the extension for the plot
+#' @param add.t.test.text Should t-test text results be added?
+#' @param use.gotham.font Should Gotham font be used?
+#' @param ... extra arguments for create.boxplot
 #'
 #' @export
-plot.study.hours <- function(
+study.hours.plot <- function(
   cost.data,
   plot.path,
   extension,
@@ -48,7 +52,7 @@ plot.study.hours <- function(
   if (add.t.test.text) {
     panel.x <- 1.9;
     panel.y <- 155;
-    t.test.layer <- t.test.plot.text(
+    t.test.layer <- ttest.plot.text(
       x = cost.data$Digitx.Time.total.hrs,
       y = cost.data$Traditional.Time.total.hrs,
       panel.x = panel.x,
@@ -72,9 +76,12 @@ plot.study.hours <- function(
 
 #' @param cost.data the cost data frame.
 #' @param extension the extension for the plot
+#' @param plot.path output plot path
+#' @param use.gotham.font Should Gotham font be used?
+#' @param ... extra arguments to create.boxplot
 #'
 #' @export
-plot.total.cost <- function(
+total.cost.plot <- function(
   cost.data,
   plot.path,
   extension,
@@ -119,6 +126,9 @@ plot.total.cost <- function(
 
 #' Full cost/hour analysis
 #' @param cost.data hours and cost data
+#' @param plot.path output plot path
+#' @param extension plot extension
+#' @param color.points Should plots be colored by `plot.color` column?
 cost.hour.analysis <- function(cost.data, plot.path, extension = 'png', color.points = FALSE) {
   # BPG Parameters
   bpg.shared <- list(
@@ -136,8 +146,8 @@ cost.hour.analysis <- function(cost.data, plot.path, extension = 'png', color.po
   bpg.shared$plot.path <- plot.path;
 
   # Plot the study hours boxplot
-  do.call(plot.study.hours, bpg.shared);
+  do.call(study.hours.plot, bpg.shared);
 
   # Plot the total study cost boxplot
-  do.call(plot.total.cost, bpg.shared);
+  do.call(total.cost.plot, bpg.shared);
   }

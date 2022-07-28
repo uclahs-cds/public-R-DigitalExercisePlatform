@@ -8,7 +8,7 @@
 #'
 #' @return latticeExtra::layer with panel of t-test result text
 #' @export
-t.test.plot.text <- function(
+ttest.plot.text <- function(
     panel.x,
     panel.y,
     paired = FALSE,

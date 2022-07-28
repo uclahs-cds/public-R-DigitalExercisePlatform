@@ -1,7 +1,8 @@
 #' Creates the 'Mean: XX' text for the multipanel percentile/boxplot for lifestyle states
-#' @param text.labels
-#' @param text.x
-#' @param text.y
+#' @param text.labels Text labels
+#' @param text.x text x location
+#' @param text.y text y location
+#' @param max.study.day Maximum study day
 state.week.text <- function(
   text.labels,
   text.x,
@@ -26,7 +27,19 @@ state.week.text <- function(
     );
   }
 
-#' Percentile plot
+#' Daily percentile plots
+#'
+#' @param daily.summary daily summary
+#' @param plot.path ouput path for plots
+#' @param extension plot extensions
+#' @param max.study.day Maximum study day to analyze
+#' @param watch.on.min Minimum number of watch on minutes to analyze
+#' @param smooth.percentiles Should the percentiles be a moving average?
+#' @param use.gotham.font Should Gotham font be used?
+#' @param mean.line Should mean line be added to the plot?
+#' @param add.week.text Should week text be added above the plots?
+#'
+#' @return
 #' @export
 daily.summary.percentile.plot <- function(
   daily.summary,

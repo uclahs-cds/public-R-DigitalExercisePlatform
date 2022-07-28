@@ -1,15 +1,14 @@
 #' DigIT-x adherence plots
 #'
 #' @param x Adherence long data.
-#' @param plot.path
-#' @param extension
-#' @param phase
+#' @param plot.path path to save plots
+#' @param extension extension to save plots
+#' @param variable.names x-axis variable names
+#' @param phase either 'phase0a' or 'phase0b'
 #' @param use.gotham.font Should Gotham Medium font be used?
 #'
 #' @return
 #' @export
-#'
-#' @examples
 adherence.boxplot <- function(
   x,
   plot.path,
