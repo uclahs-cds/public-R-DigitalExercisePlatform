@@ -13,6 +13,8 @@ save.session.profile <- function(filename, stdout = FALSE, append = FALSE) {
   sink();
   }
 
+#' Prints information about memory, time and objects
+#'
 #' @export
 session.profile <- function() {
   cat('### Memory #########################################################################################\n')
