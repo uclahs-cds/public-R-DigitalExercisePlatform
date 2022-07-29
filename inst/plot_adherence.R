@@ -3,7 +3,7 @@ library(BoutrosLab.plotting.general);
 
 script.name <- 'adherence';
 data.folder <- Sys.getenv('EXONC_DEXP_HOME');
-if (data.folder == '') data.folder <- here::here('results');
+if (data.folder == '') data.folder <- 'DEXP_results';
 
 analysis.init(
   data.folder = data.folder,

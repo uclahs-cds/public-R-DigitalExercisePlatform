@@ -5,7 +5,7 @@ library(lmerTest);
 
 script.name <- 'daily_summary_physiological';
 data.folder <- Sys.getenv('EXONC_DEXP_HOME');
-if (data.folder == '') data.folder <- here::here('results');
+if (data.folder == '') data.folder <- 'DEXP_results';
 plot.path <- file.path(data.folder, 'plots', script.name);
 results.path <- file.path(data.folder, 'results', script.name);
 extension <- 'png';

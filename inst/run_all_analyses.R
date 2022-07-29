@@ -3,14 +3,17 @@ library(BoutrosLab.plotting.general);
 
 script.name <- 'run_all_analyses';
 data.folder <- Sys.getenv('EXONC_DEXP_HOME');
-if (data.folder == '') data.folder <- here::here('results');
+if (data.folder == '') data.folder <- 'DEXP_results';
 
 analysis.init(
   data.folder = data.folder,
   script.name = script.name,
   split.stdout = TRUE,
   expr = {
-    run.scripts <- here::here(list.files('inst', pattern = '*\\.R$', full.names = TRUE));
+    run.scripts <- system.file(
+      list.files('inst', pattern = '*\\.R$', full.names = TRUE),
+      package = 'EXONC.DEXP'
+      );
     # Remove this script
     run.scripts <- run.scripts[! grepl(script.name, run.scripts)];
     for (s in run.scripts) {
