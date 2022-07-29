@@ -1,8 +1,8 @@
-library(DigITx);
+library(EXONC.DEXP);
 library(BoutrosLab.plotting.general);
 
 script.name <- 'adherence';
-data.folder <- Sys.getenv('DIGITX_HOME');
+data.folder <- Sys.getenv('EXONC_DEXP_HOME');
 if (data.folder == '') data.folder <- here::here('results');
 
 analysis.init(
@@ -17,8 +17,8 @@ analysis.init(
     # Boxplot with the points shown (stripplot with a barplot overlaid), with columns for each data-type,
     # and then outlier points labeled with their patient numbers
     # Make a copy of the adherence data for Phase 0a patients
-    perc.phase0a.long <- adherence.perc.phase0a;
-    perc.phase0b.long <- adherence.perc.phase0b;
+    perc.phase0a.long <- read.table(system.file('extdata', 'adherence_perc_phase0a.tsv', package = 'EXONC.DEXP'), header = TRUE, sep = '\t');
+    perc.phase0b.long <- read.table(system.file('extdata', 'adherence_perc_phase0a.tsv', package = 'EXONC.DEXP'), header = TRUE, sep = '\t');
 
     perc.phase0a.long <- perc.phase0a.long[perc.phase0a.long$Variable != 'Sleep', ];
     perc.phase0b.long <- perc.phase0b.long[perc.phase0b.long$Variable != 'Sleep', ];

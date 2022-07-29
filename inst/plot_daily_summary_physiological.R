@@ -1,10 +1,10 @@
-library(DigITx);
+library(EXONC.DEXP);
 library(BoutrosLab.plotting.general);
 library(lme4);
 library(lmerTest);
 
 script.name <- 'daily_summary_physiological';
-data.folder <- Sys.getenv('DIGITX_HOME');
+data.folder <- Sys.getenv('EXONC_DEXP_HOME');
 if (data.folder == '') data.folder <- here::here('results');
 plot.path <- file.path(data.folder, 'plots', script.name);
 results.path <- file.path(data.folder, 'results', script.name);
@@ -17,13 +17,13 @@ analysis.init(
   expr = {
     daily.summary <- read.table(
       # TODO: Fix paths
-      here::here('inst/data-raw/daily_summary.tsv'),
+      system.file('extdata', 'daily_summary.tsv', package = 'EXONC.DEXP'),
       sep = '\t',
       header = TRUE
       );
 
     baseline.data <- read.table(
-      here::here('inst/data-raw/baseline_data.tsv'),
+      system.file('extdata', 'baseline_data.tsv', package = 'EXONC.DEXP'),
       sep = '\t',
       header = TRUE
       );

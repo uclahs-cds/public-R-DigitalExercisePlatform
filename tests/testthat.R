@@ -1,4 +1,4 @@
 library(testthat)
-library(DigITx)
+library(EXONC.DEXP)
 
-test_check('DigITx')
+test_check('EXONC.DEXP')

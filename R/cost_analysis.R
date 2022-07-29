@@ -1,4 +1,4 @@
-#' Creates the estimated study hours plot for DigITx
+#' Creates the estimated study hours plot for EXONC.DEXP
 
 #' @param cost.data the cost data frame.
 #' @param plot.path path to the plot output
@@ -15,13 +15,13 @@ study.hours.plot <- function(
   add.t.test.text = TRUE,
   use.gotham.font = TRUE,
   ...) {
-  digitx.hours <- cbind(cost.data[, c('Patient', 'patient.id', 'Digitx.Time.total.hrs')], study = 1);
-  colnames(digitx.hours) <- c('Patient', 'patient.id', 'hours', 'study');
+  EXONC.DEXP.hours <- cbind(cost.data[, c('Patient', 'patient.id', 'EXONC.DEXP.Time.total.hrs')], study = 1);
+  colnames(EXONC.DEXP.hours) <- c('Patient', 'patient.id', 'hours', 'study');
   trad.hours <- cbind(cost.data[, c('Patient', 'patient.id', 'Traditional.Time.total.hrs')], study = 0);
   colnames(trad.hours) <- c('Patient', 'patient.id', 'hours', 'study');
 
   time.df <- rbind(
-    digitx.hours,
+    EXONC.DEXP.hours,
     trad.hours
     );
 
@@ -53,7 +53,7 @@ study.hours.plot <- function(
     panel.x <- 1.9;
     panel.y <- 155;
     t.test.layer <- ttest.plot.text(
-      x = cost.data$Digitx.Time.total.hrs,
+      x = cost.data$EXONC.DEXP.Time.total.hrs,
       y = cost.data$Traditional.Time.total.hrs,
       panel.x = panel.x,
       panel.y = panel.y,
@@ -72,7 +72,7 @@ study.hours.plot <- function(
     );
   }
 
-#' Creates the estimated total cost boxplot plot for DigITx
+#' Creates the estimated total cost boxplot plot for EXONC.DEXP
 
 #' @param cost.data the cost data frame.
 #' @param extension the extension for the plot
@@ -88,7 +88,7 @@ total.cost.plot <- function(
   use.gotham.font = TRUE,
   ...) {
   phase.0b.costs <- cbind(cost.data[cost.data$phase0b, 'Total.Cost', drop = FALSE], group = 1);
-  # Add the DigITx costs as '0'
+  # Add the EXONC.DEXP costs as '0'
   phase.0b.costs <- rbind(phase.0b.costs, c(0, 2));
 
   height <- 6;

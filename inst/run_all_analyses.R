@@ -1,8 +1,8 @@
-library(DigITx);
+library(EXONC.DEXP);
 library(BoutrosLab.plotting.general);
 
 script.name <- 'run_all_analyses';
-data.folder <- Sys.getenv('DIGITX_HOME');
+data.folder <- Sys.getenv('EXONC_DEXP_HOME');
 if (data.folder == '') data.folder <- here::here('results');
 
 analysis.init(
@@ -18,7 +18,7 @@ analysis.init(
       }
 
     plot.path <- file.path(data.folder, 'plots');
-    update.figures.script <- system.file('bash_scripts', 'update_combined_figures.sh', package = 'DigITx');
+    update.figures.script <- system.file('bash_scripts', 'update_combined_figures.sh', package = 'EXONC.DEXP');
     update.figures.script <- paste(update.figures.script, plot.path);
     print(paste0('Running command: ', update.figures.script))
     system(update.figures.script);

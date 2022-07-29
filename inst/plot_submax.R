@@ -1,8 +1,8 @@
-library(DigITx);
+library(EXONC.DEXP);
 library(BoutrosLab.plotting.general);
 
 script.name <- 'submax.analysis';
-data.folder <- Sys.getenv('DIGITX_HOME');
+data.folder <- Sys.getenv('EXONC_DEXP_HOME');
 if (data.folder == '') data.folder <- here::here('results');
 plot.path <- file.path(data.folder, 'plots', script.name);
 
@@ -12,13 +12,13 @@ analysis.init(
   split.stdout = TRUE,
   expr = {
     submax.data <- read.table(
-      here::here('inst/data-raw/submax.tsv'),
+      system.file('extdata', 'submax.tsv', package = 'EXONC.DEXP'),
       sep = '\t',
       header = TRUE
       );
 
     submax.long.data <- read.table(
-      here::here('inst/data-raw/submax_long.tsv'),
+      system.file('extdata', 'submax_long.tsv', package = 'EXONC.DEXP'),
       sep = '\t',
       header = TRUE
       );
