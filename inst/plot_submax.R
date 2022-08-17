@@ -28,6 +28,7 @@ analysis.init(
       plot.path = plot.path,
       color.points = TRUE,
       use.gotham.font = TRUE,
+      phase0b = TRUE,
       extension = 'png'
       );
     }

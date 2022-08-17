@@ -15,7 +15,15 @@ submax.analysis <- function(
   extension = 'png',
   color.points = FALSE,
   use.gotham.font = TRUE,
+  phase0b = TRUE,
   ...) {
+
+  suffix <- '_fullcohort';
+  if (phase0b) {
+    submax.long.data <- submax.long.data[! submax.long.data$Study.ID %in% c('EX001', 'EX002', 'EX003'), ];
+    suffix <- '_phase0b';
+  }
+
   bl.submax <- submax.long.data$Time.to.submax[submax.long.data$Session == 'BL'];
   fu.submax <- submax.long.data$Time.to.submax[submax.long.data$Session == 'FU'];
 
@@ -44,7 +52,7 @@ submax.analysis <- function(
 
   filename <- file.path(
     plot.path,
-    generate.filename('digIT-EX', file.core = 'full_cohort_submax', extension = extension)
+    generate.filename('digIT-EX', file.core = paste0('full_cohort_submax', suffix), extension = extension)
     );
   print(sprintf('Plotting to: %s', filename));
 
