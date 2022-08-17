@@ -15,13 +15,13 @@ submax.analysis <- function(
   extension = 'png',
   color.points = FALSE,
   use.gotham.font = TRUE,
-  phase0b = TRUE,
+  phase0b.only = TRUE,
   ...) {
 
   suffix <- '_fullcohort';
-  if (phase0b) {
+  if (phase0b.only) {
     submax.long.data <- submax.long.data[! submax.long.data$Study.ID %in% c('EX001', 'EX002', 'EX003'), ];
-    suffix <- '_phase0b';
+    suffix <- '_phase0b.only';
   }
 
   bl.submax <- submax.long.data$Time.to.submax[submax.long.data$Session == 'BL'];
