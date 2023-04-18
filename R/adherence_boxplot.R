@@ -11,19 +11,14 @@
 #' @export
 adherence.boxplot <- function(
   x,
-  plot.path,
+  plot.path = NULL,
   extension = c('png', 'pdf'),
-  phase = c('phase0a', 'phase0b'),
+  phase = c('phase0a', 'phase0b', 'phase1'),
   variable.names = NULL,
-  use.gotham.font = TRUE
+  use.gotham.font = FALSE
   ) {
   phase <- match.arg(phase);
-
-  filename <- file.path(
-    plot.path,
-    generate.filename('digIT-EX', file.core = paste0(phase, '_adherence'), extension = extension)
-    );
-  print(sprintf('Plotting to: %s', filename));
+  write.plot <- ! is.null(plot.path);
 
   yat <- seq(0, 100, by = 20);
   ylimits <- c(-5, 105);
@@ -31,7 +26,7 @@ adherence.boxplot <- function(
   height <- 8;
   width <- 12;
 
-  adherence.plot <- create.boxplot(
+  adherence.plot <- BoutrosLab.plotting.general::create.boxplot(
     formula = Percent ~ Variable.factor,
     data = x,
     add.stripplot = TRUE,
@@ -54,12 +49,21 @@ adherence.boxplot <- function(
     adherence.plot <- replace.font(adherence.plot, font = gotham.font);
     }
 
-  BoutrosLab.plotting.general::write.plot(
-    trellis.object = adherence.plot,
-    filename = filename,
-    height = height,
-    width = width
-    );
+  if (write.plot) {
+    filename <- file.path(
+      plot.path,
+      generate.filename('digIT-EX', file.core = paste0(phase, '_adherence'), extension = extension)
+      );
+    print(sprintf('Plotting to: %s', filename));
+    BoutrosLab.plotting.general::write.plot(
+      trellis.object = adherence.plot,
+      filename = filename,
+      height = height,
+      width = width
+      );
 
-  invisible(adherence.plot);
+    invisible(adherence.plot);
+    } else {
+    return(adherence.plot);
+    }
   }
