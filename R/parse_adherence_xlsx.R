@@ -30,4 +30,3 @@ parse.adherence.xlsx <- function(x) {
 
   return(adherence);
 }
-
