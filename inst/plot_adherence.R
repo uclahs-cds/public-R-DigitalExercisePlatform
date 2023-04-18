@@ -37,12 +37,12 @@ analysis.init(
 
     adherence.long <- reshape(
       data = adherence[, c('study.id', 'phase', 'attendance.percent', 'watch.percent', 'bp.percent', 'scale.percent')],
-      idvar = c("study.id", 'phase'),
-      varying = c("attendance.percent", "watch.percent", "bp.percent", "scale.percent"),
-      v.names = "Percent",
-      timevar = "variable",
-      times = c("attendance", "watch", "bp", "scale"),
-      direction = "long"
+      idvar = c('study.id', 'phase'),
+      varying = c('attendance.percent', 'watch.percent', 'bp.percent', 'scale.percent'),
+      v.names = 'Percent',
+      timevar = 'variable',
+      times = c('attendance', 'watch', 'bp', 'scale'),
+      direction = 'long'
       );
 
     adherence.long$Variable.factor <- factor(adherence.long$variable, levels = c('attendance', 'watch', 'bp', 'scale'));
