@@ -15,7 +15,13 @@ adherence.boxplot <- function(
   extension = c('png', 'pdf'),
   phase = c('phase0a', 'phase0b', 'phase1'),
   variable.names = NULL,
-  use.gotham.font = FALSE
+  use.gotham.font = FALSE,
+  col = 'transparent',
+  points.col = 'darkgrey',
+  formula = Percent ~ Variable.factor,
+  xlab.label = '',
+  main = '',
+  ...
   ) {
   phase <- match.arg(phase);
   write.plot <- ! is.null(plot.path);
@@ -26,8 +32,9 @@ adherence.boxplot <- function(
   height <- 8;
   width <- 12;
 
+  lab.cex <- 3
   adherence.plot <- BoutrosLab.plotting.general::create.boxplot(
-    formula = Percent ~ Variable.factor,
+    formula = formula,
     data = x,
     add.stripplot = TRUE,
     ylab.label = 'Adherence, %',
@@ -35,14 +42,19 @@ adherence.boxplot <- function(
     xaxis.lab = if (!is.null(variable.names)) variable.names else levels(x$Variable.factor),
     yaxis.lab = yaxis.lab,
     ylimits = ylimits,
-    xlab.label = '',
+    col = col,
+    points.col = points.col,
+    xlab.label = xlab.label,
+    xlab.cex = lab.cex,
     points.cex = 1,
     xaxis.cex = 2,
-    ylab.cex = 3,
+    ylab.cex = lab.cex,
     yaxis.cex = 2.5,
+    main = main,
     ylab.axis.padding = 3,
     height = height,
-    width = width
+    width = width,
+    ...
     );
 
   if (use.gotham.font) {

@@ -25,8 +25,15 @@ analysis.init(
 
     variable.names <- c('Exercise\nTherapy', 'Watch', 'Blood\nPressure', 'Scale');
 
-    adherence.path <- file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO Adherence_Phase0-1.xlsx')
-    adherence <- parse.adherence.xlsx(adherence.path)
+    adherence.path <- file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_Adherence_Phase0-1.xlsx');
+    adherence <- parse.adherence.xlsx(adherence.path);
+
+    dosage <- read.table(
+      file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_Dose_levels.tsv'),
+      header = TRUE
+      )
+
+#     setdiff(dosage$study.id[dosage$phase == '1a'], adherence$study.id[adherence$phase == '1a'])
 
     write.table(
       adherence,
@@ -49,7 +56,10 @@ analysis.init(
     adherence.long$Percent <- adherence.long$Percent * 100;
 
     adherence.long.0b <- adherence.long[startsWith(adherence.long$phase, '0B'), ];
-    adherence.long.phase1 <- adherence.long[startsWith(adherence.long$phase, '1a'), ];
+    adherence.long.phase1 <- adherence.long[adherence.long$phase %in% c('1a', '0B - Prostate') , ];
+
+    # Add dosage
+    adherence.long.phase1 <- merge(adherence.long.phase1, dosage, by = 'study.id', all.x = TRUE)
 
     adherence.boxplot(
       x = adherence.long.0b,
@@ -68,5 +78,35 @@ analysis.init(
       use.gotham.font = FALSE,
       variable.names = variable.names
       );
+
+    dosages <- sort(unique(adherence.long.phase1$dose), na.last = NA)
+    dosage.colors <- colour.gradient('orange', length(dosages))
+    names(dosage.colors) <- dosages
+
+    adherence.long.phase1$Variable.factor.long <- adherence.long.phase1$Variable.factor
+    levels(adherence.long.phase1$Variable.factor.long) <- c('Exercise Therapy', 'Watch', 'Blood Pressure', 'Scale');
+
+    adherence.long.phase1$dose.fct <- as.factor(adherence.long.phase1$dose);
+    dose.adherence.boxplot <- adherence.boxplot(
+      x = adherence.long.phase1,
+      formula = Percent ~ dose.fct | Variable.factor.long,
+      extension = extension,
+      phase = 'phase1',
+      variable.names = dosages,
+      use.gotham.font = FALSE,
+      points.col = dosage.colors,
+      xlab.label = 'Dose'
+      );
+
+    write.plot(
+      dose.adherence.boxplot,
+      width = 12,
+      height = 10,
+      resolution = 100,
+      filename = file.path(
+        plot.path,
+        generate.filename('digIT-EX', file.core = paste0('1a_1b-prostate', '_adherence_dosage'), extension = 'png')
+        )
+      )
     }
   );
