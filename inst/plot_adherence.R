@@ -33,7 +33,10 @@ analysis.init(
       header = TRUE
       )
 
-#     setdiff(dosage$study.id[dosage$phase == '1a'], adherence$study.id[adherence$phase == '1a'])
+    id.mapping <- read.study.id.mapping(original.names = FALSE);
+
+    # Switch back to original study id
+    adherence$study.id[startsWith(adherence$phase, '0')] <- id.mapping[as.character(adherence$study.id[startsWith(adherence$phase, '0')])]
 
     write.table(
       adherence,
@@ -90,6 +93,8 @@ analysis.init(
     dose.adherence.boxplot <- adherence.boxplot(
       x = adherence.long.phase1,
       formula = Percent ~ dose.fct | Variable.factor.long,
+      main = 'Phase 0b - Prostate + Phase 1',
+      main.cex = 2,
       extension = extension,
       phase = 'phase1',
       variable.names = dosages,
@@ -98,15 +103,17 @@ analysis.init(
       xlab.label = 'Dose'
       );
 
+    dose.adherence.path <- file.path(
+        plot.path,
+        generate.filename('digIT-EX', file.core = paste0('1a_1b-prostate', '_adherence_dosage'), extension = 'png')
+        );
+    cat('Writing dose-adherence plot to: ', dose.adherence.path, '\n');
     write.plot(
       dose.adherence.boxplot,
       width = 12,
       height = 10,
       resolution = 100,
-      filename = file.path(
-        plot.path,
-        generate.filename('digIT-EX', file.core = paste0('1a_1b-prostate', '_adherence_dosage'), extension = 'png')
-        )
+      filename = dose.adherence.path
       )
     }
   );
