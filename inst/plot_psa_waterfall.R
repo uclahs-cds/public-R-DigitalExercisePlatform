@@ -30,7 +30,7 @@ analysis.init(
     colnames(psa.dose) <- gsub('[.]$', '', tolower(colnames(psa.dose)))
     colnames(psa.dose) <- gsub('[.]+', '.', colnames(psa.dose))
 
-    common.cols <- c("study.id" , "bl.psa.ng.ml", "fu.psa.ng.ml", "dose")
+    common.cols <- c('study.id' , 'bl.psa.ng.ml', 'fu.psa.ng.ml', 'dose')
     psa.data <- rbind(
       psa.dose[, common.cols],
       psa.control[, common.cols]
