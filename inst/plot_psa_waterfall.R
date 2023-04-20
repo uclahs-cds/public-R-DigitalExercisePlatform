@@ -40,30 +40,28 @@ analysis.init(
     psa.data$psa.delta <- psa.data$fu.psa.ng.ml - psa.data$bl.psa.ng.ml
     psa.data$psa.percent <- psa.data$psa.delta / psa.data$bl.psa.ng.ml
 
+    # Something wrong here??
+    psa.data <- psa.data[order(- as.integer(psa.data$dose.fct), psa.data$psa.delta), ]
+    rownames(psa.data) <- NULL
+    psa.data$y <- 1:nrow(psa.data)
+
     dose.colors <- c('white', colour.gradient('royalblue', 6))
+
+    # Split and combine
+    # Stack on top of each other
+
     names(dose.colors) <- levels(psa.data$dose.fct)
     create.barplot(
-      study.id ~ psa.delta,
+      y ~ psa.delta,
       data = psa.data,
-      col = dose.colors[as.character(psa.data$dose)],
+      col = unname(dose.colors[as.character(psa.data$dose)]),
       plot.horizontal = TRUE,
       ylab.label = 'Patient',
       ylab.cex = 1.5,
       xlab.label = 'PSA Delta',
       yaxis.lab = rep('', nrow(psa.data)),
-      yaxis.tck = 0,
-      key = list(
-        corner = c(0.055,.95),
-        cex = 0.8,
-        cex.title = 1,
-        title = 'Dose',
-        rect = list(
-          col = dose.colors
-          ),
-        text = list(
-          names(dose.colors)
-          )
-        )
-    )
+      disable.factor.sorting = TRUE,
+      yaxis.tck = 0
+      )
     }
   )
