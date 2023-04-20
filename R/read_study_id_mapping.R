@@ -13,4 +13,3 @@ read.study.id.mapping <- function(original.names = TRUE) {
     }
   return(res);
   }
-
