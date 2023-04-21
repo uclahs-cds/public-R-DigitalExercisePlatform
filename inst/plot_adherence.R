@@ -82,9 +82,9 @@ analysis.init(
       variable.names = variable.names
       );
 
-    dosages <- sort(unique(adherence.long.phase1$dose), na.last = NA)
-    dosage.colors <- colour.gradient('orange', length(dosages))
-    names(dosage.colors) <- dosages
+    doses <- sort(unique(adherence.long.phase1$dose), na.last = NA)
+    dose.colors <- c(colour.gradient('royalblue', 6));
+    names(dose.colors) <- doses
 
     adherence.long.phase1$Variable.factor.long <- adherence.long.phase1$Variable.factor
     levels(adherence.long.phase1$Variable.factor.long) <- c('Exercise Therapy', 'Watch', 'Blood Pressure', 'Scale');
@@ -97,15 +97,19 @@ analysis.init(
       main.cex = 2,
       extension = extension,
       phase = 'phase1',
-      variable.names = dosages,
+      variable.names = doses,
       use.gotham.font = FALSE,
-      points.col = dosage.colors,
+      points.col = dose.colors,
       xlab.label = 'Dose'
       );
 
     dose.adherence.path <- file.path(
         plot.path,
-        generate.filename('digIT-EX', file.core = paste0('1a_1b-prostate', '_adherence_dosage'), extension = 'png')
+        generate.filename(
+          'digIT-EX',
+          file.core = paste0('1a_1b-prostate', '_adherence_dosage'),
+          extension = 'png'
+          )
         );
     cat('Writing dose-adherence plot to: ', dose.adherence.path, '\n');
     write.plot(
@@ -114,6 +118,41 @@ analysis.init(
       height = 10,
       resolution = 100,
       filename = dose.adherence.path
+      )
+
+    # Plot of only exercise therapy
+    adherence.long.phase1.ET <- adherence.long.phase1[
+      adherence.long.phase1$Variable.factor == 'attendance',
+      ]
+
+    dose.adherence.boxplot.ET <- adherence.boxplot(
+      x = adherence.long.phase1.ET,
+      formula = Percent ~ dose.fct,
+      main = 'Phase 0b - Prostate + Phase 1',
+      main.cex = 2,
+      extension = extension,
+      phase = 'phase1',
+      variable.names = doses,
+      use.gotham.font = FALSE,
+      points.col = dose.colors[as.character(adherence.long.phase1.ET$dose)],
+      xlab.label = 'Dose'
+      );
+
+    dose.adherence.path.ET <- file.path(
+      plot.path,
+      generate.filename(
+        'digIT-EX',
+        file.core = paste0('1a_1b-prostate', '_ET_adherence_dosage'),
+        extension = 'png'
+        )
+      );
+    cat('Writing dose-adherence ET plot to: ', dose.adherence.path.ET, '\n');
+    write.plot(
+      dose.adherence.boxplot.ET,
+      width = 12,
+      height = 10,
+      resolution = 250,
+      filename = dose.adherence.path.ET
       )
     }
   );
