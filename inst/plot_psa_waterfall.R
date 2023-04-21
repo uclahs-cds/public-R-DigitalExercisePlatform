@@ -42,7 +42,7 @@ analysis.init(
     psa.data$psa.delta <- psa.data$fu.psa.ng.ml - psa.data$bl.psa.ng.ml
     psa.data$psa.percent <- psa.data$psa.delta / psa.data$bl.psa.ng.ml
 
-    psa.data <- psa.data[order(- as.integer(psa.data$dose.fct), psa.data$psa.delta), ]
+    psa.data <- psa.data[order(as.integer(psa.data$dose.fct), -psa.data$psa.delta), ]
     rownames(psa.data) <- NULL
 
     dose.colors <- c('white', colour.gradient('royalblue', 6))
@@ -51,7 +51,8 @@ analysis.init(
     # Split and combine
     # Stack on top of each other
 
-    psa.data$y <- 1:nrow(psa.data) + (7 - as.numeric(psa.data$dose.fct))
+    # psa.data$y <- 1:nrow(psa.data) + (7 - as.numeric(psa.data$dose.fct))
+    psa.data$y <- 1:nrow(psa.data) + (as.numeric(psa.data$dose.fct) - 1)
 
     psa.data$col <- dose.colors[psa.data$dose]
 
@@ -66,29 +67,29 @@ analysis.init(
       dummy.data
     )
 
-    xlimits <- max(abs(psa.data$psa.delta)) * c(-1, 1) + c(-0.05, 0.05);
-    xat <- seq(-6, 6, by = 1);
+    xlimits <- range(psa.data$psa.delta) + c(-0.05, 0.05);
+    xat <- seq(-6, 9, by = 1);
     waterfall.grouped.plot <- create.barplot(
-        y ~ psa.delta,
+        psa.delta ~ y,
         data = psa.data.dummy,
         col = psa.data.dummy$col,
-        yat = seq(1, max(psa.data.dummy$y)),
-        plot.horizontal = TRUE,
-        ylab.label = 'Patient',
-        xlab.label = 'PSA Delta',
-        yaxis.lab = rep('', nrow(psa.data.dummy)),
+        xat = seq(1, max(psa.data.dummy$y)),
+        plot.horizontal = FALSE,
+        xlab.label = 'Patient',
+        ylab.label = 'PSA Delta',
+        xaxis.lab = rep('', nrow(psa.data.dummy)),
         disable.factor.sorting = TRUE,
-        yaxis.tck = 0,
-        xaxis.tck = c(1, 0),
-        xlimits = xlimits,
-        xat = xat
+        xaxis.tck = 0,
+        yaxis.tck = c(1, 0),
+        ylimits = xlimits,
+        yat = xat
         );
 
-    waterfall.grouped.plot <- remove.axis(waterfall.grouped.plot, side = c('left', 'right', 'top'))
+    waterfall.grouped.plot <- remove.axis(waterfall.grouped.plot, side = c('bottom', 'right', 'top'))
 
     write.plot(
       waterfall.grouped.plot,
-      width = 8,
+      width = 12,
       height = 10,
       resolution = 500,
       filename = file.path(
@@ -107,27 +108,27 @@ analysis.init(
     psa.data$y <- 1:nrow(psa.data)
 
     waterfall.plot <- create.barplot(
-        y ~ psa.delta,
+        psa.delta ~ y,
         data = psa.data,
         col = psa.data$col,
-        plot.horizontal = TRUE,
-        ylab.label = 'Patient',
-        xlab.label = 'PSA Delta',
-        yaxis.lab = rep('', nrow(psa.data)),
+        plot.horizontal = FALSE,
+        xlab.label = 'Patient',
+        ylab.label = 'PSA Delta',
+        xaxis.lab = rep('', nrow(psa.data)),
         disable.factor.sorting = TRUE,
-        yaxis.tck = 0,
-        xaxis.tck = c(1, 0),
-        xlimits = xlimits,
-        xat = xat
+        xaxis.tck = 0,
+        yaxis.tck = c(1, 0),
+        ylimits = xlimits,
+        yat = xat
         )
 
-    waterfall.plot <- remove.axis(waterfall.plot, side = c('left', 'right', 'top'))
+    waterfall.plot <- remove.axis(waterfall.plot, side = c('bottom', 'right', 'top'))
 
     write.plot(
       waterfall.plot,
-      width = 8,
+      width = 12,
       height = 10,
-      resolution = 250,
+      resolution = 500,
       filename = file.path(
         plot.path,
         generate.filename('digIT-EX', file.core = 'PSA_dose_waterfall_delta_ordered', extension = 'png')
