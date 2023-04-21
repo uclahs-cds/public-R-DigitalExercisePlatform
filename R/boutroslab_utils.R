@@ -2,6 +2,7 @@
 #'
 #' @param filename Name of the file to write session profile information to. If stdout = TRUE, the session profile information is also printed to the screen.
 #' @param stdout Print session profile information to screen. Default is FALSE.
+#' @param append Should the results be appended to file?
 #' @details Session profile includes memory used from gc(), process time elapsed from proc.time(), the output of ls() in the global environment, and the session info from sessionInfo()
 #' @return No return value, just writes output to file (and possibly screen).
 #'
@@ -12,6 +13,8 @@ save.session.profile <- function(filename, stdout = FALSE, append = FALSE) {
   sink();
   }
 
+#' Prints information about memory, time and objects
+#'
 #' @export
 session.profile <- function() {
   cat('### Memory #########################################################################################\n')
@@ -25,7 +28,10 @@ session.profile <- function() {
   };
 
 #' Improved listing of objects in R session
-#'
+#' @param pos Alternative way to specify environment, should not need to change. See ls.
+#' @param order.by Order objects by name (default); other options: Type, Size, PrettySize, Rows or Columns.
+#' @param decreasing Order objects in decreasing order (default).
+#' @param n The number of objects to print; 10 is default.
 #' @export
 ls.objects <- function(pos = 1, order.by, decreasing = TRUE, n = 10) {
   napply <- function(ls.names, fn) {

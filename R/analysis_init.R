@@ -1,4 +1,10 @@
 #' Wrapper to do analysis setup, cleanup and logging
+#'
+#' @param data.folder Data folder
+#' @param script.name Name of the script
+#' @param split.stdout Should stdout be written to file and stdout?
+#' @param expr R code that we want to execute
+#'
 #' @export
 analysis.init <- function(data.folder, script.name, split.stdout = TRUE, expr) {
 

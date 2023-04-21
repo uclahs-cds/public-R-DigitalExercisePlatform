@@ -1,23 +1,27 @@
-#' Creates the estimated study hours plot for DigITx
+#' Creates the estimated study hours plot for EXONC.DEXP
 
 #' @param cost.data the cost data frame.
+#' @param plot.path path to the plot output
 #' @param extension the extension for the plot
+#' @param add.t.test.text Should t-test text results be added?
+#' @param use.gotham.font Should Gotham font be used?
+#' @param ... extra arguments for create.boxplot
 #'
 #' @export
-plot.study.hours <- function(
+study.hours.plot <- function(
   cost.data,
   plot.path,
   extension,
   add.t.test.text = TRUE,
   use.gotham.font = TRUE,
   ...) {
-  digitx.hours <- cbind(cost.data[, c('Patient', 'patient.id', 'Digitx.Time.total.hrs')], study = 1);
-  colnames(digitx.hours) <- c('Patient', 'patient.id', 'hours', 'study');
+  EXONC.DEXP.hours <- cbind(cost.data[, c('Patient', 'patient.id', 'EXONC.DEXP.Time.total.hrs')], study = 1);
+  colnames(EXONC.DEXP.hours) <- c('Patient', 'patient.id', 'hours', 'study');
   trad.hours <- cbind(cost.data[, c('Patient', 'patient.id', 'Traditional.Time.total.hrs')], study = 0);
   colnames(trad.hours) <- c('Patient', 'patient.id', 'hours', 'study');
 
   time.df <- rbind(
-    digitx.hours,
+    EXONC.DEXP.hours,
     trad.hours
     );
 
@@ -46,10 +50,10 @@ plot.study.hours <- function(
     }
 
   if (add.t.test.text) {
-    panel.x <- 1;
-    panel.y <- 25;
-    t.test.layer <- t.test.plot.text(
-      x = cost.data$Digitx.Time.total.hrs,
+    panel.x <- 1.9;
+    panel.y <- 155;
+    t.test.layer <- ttest.plot.text(
+      x = cost.data$EXONC.DEXP.Time.total.hrs,
       y = cost.data$Traditional.Time.total.hrs,
       panel.x = panel.x,
       panel.y = panel.y,
@@ -68,20 +72,23 @@ plot.study.hours <- function(
     );
   }
 
-#' Creates the estimated total cost boxplot plot for DigITx
+#' Creates the estimated total cost boxplot plot for EXONC.DEXP
 
 #' @param cost.data the cost data frame.
 #' @param extension the extension for the plot
+#' @param plot.path output plot path
+#' @param use.gotham.font Should Gotham font be used?
+#' @param ... extra arguments to create.boxplot
 #'
 #' @export
-plot.total.cost <- function(
+total.cost.plot <- function(
   cost.data,
   plot.path,
   extension,
   use.gotham.font = TRUE,
   ...) {
   phase.0b.costs <- cbind(cost.data[cost.data$phase0b, 'Total.Cost', drop = FALSE], group = 1);
-  # Add the DigITx costs as '0'
+  # Add the EXONC.DEXP costs as '0'
   phase.0b.costs <- rbind(phase.0b.costs, c(0, 2));
 
   height <- 6;
@@ -119,14 +126,17 @@ plot.total.cost <- function(
 
 #' Full cost/hour analysis
 #' @param cost.data hours and cost data
+#' @param plot.path output plot path
+#' @param extension plot extension
+#' @param color.points Should plots be colored by `plot.color` column?
 cost.hour.analysis <- function(cost.data, plot.path, extension = 'png', color.points = FALSE) {
   # BPG Parameters
   bpg.shared <- list(
     points.cex = 1,
-    ylab.cex = 1.75,
+    ylab.cex = 1.7,
     ylab.axis.padding = 3,
     points.col = if (color.points) cost.data$plot.color else 'darkgrey',
-    xaxis.lab = c('Traditional', 'DigITx'),
+    xaxis.lab = c('Virtual\nTwin', 'DEXP'),
     extension = extension
     );
 
@@ -136,8 +146,8 @@ cost.hour.analysis <- function(cost.data, plot.path, extension = 'png', color.po
   bpg.shared$plot.path <- plot.path;
 
   # Plot the study hours boxplot
-  do.call(plot.study.hours, bpg.shared);
+  do.call(study.hours.plot, bpg.shared);
 
   # Plot the total study cost boxplot
-  do.call(plot.total.cost, bpg.shared);
+  do.call(total.cost.plot, bpg.shared);
   }

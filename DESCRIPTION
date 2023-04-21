@@ -1,10 +1,10 @@
-Package: DigITx
+Package: EXONC.DEXP
 Type: Package
-Title: A Digital, Decentralized Clinical Trial of Exercise Therapy in Cancer (DigITx)
+Title: A Digital, Decentralized Clinical Trial of Exercise Therapy in Cancer (EXONC.DEXP)
 Version: 0.1.0
 Author: Who wrote it
 Maintainer: Stefan Eng <stefaneng@mednet.ucla.edu>
-Description: Code for 'A Digital, Decentralized Clinical Trial of Exercise Therapy in Cancer (DigITx)'
+Description: Code for 'A Digital, Decentralized Clinical Trial of Exercise Therapy in Cancer (EXONC.DEXP)'
 Depends: 
     R (>= 2.10)
 Suggests: 
@@ -17,8 +17,8 @@ LazyData: true
 Imports:
     latticeExtra,
     BoutrosLab.plotting.general,
-    here,
     plyr,
-    lattice,
-    lsr
-RoxygenNote: 7.1.1
+    lsr,
+    lmerTest,
+    slider
+RoxygenNote: 7.2.1

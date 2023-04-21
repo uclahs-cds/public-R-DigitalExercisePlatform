@@ -1,9 +1,9 @@
-library(DigITx);
+library(EXONC.DEXP);
 library(BoutrosLab.plotting.general);
 
 script.name <- 'daily_summary_states';
-data.folder <- Sys.getenv('DIGITX_HOME');
-if (data.folder == '') data.folder <- here::here('results');
+data.folder <- Sys.getenv('EXONC_DEXP_HOME');
+if (data.folder == '') data.folder <- 'DEXP_results';
 plot.path <- file.path(data.folder, 'plots', script.name);
 
 analysis.init(
@@ -12,7 +12,7 @@ analysis.init(
   split.stdout = TRUE,
   expr = {
     daily.summary <- read.table(
-      here::here('inst/data-raw/daily_summary.tsv'),
+      system.file('extdata', 'daily_summary.tsv', package = 'EXONC.DEXP'),
       sep = '\t',
       header = TRUE
       );

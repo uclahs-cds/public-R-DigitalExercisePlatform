@@ -15,7 +15,15 @@ submax.analysis <- function(
   extension = 'png',
   color.points = FALSE,
   use.gotham.font = TRUE,
+  phase0b.only = TRUE,
   ...) {
+
+  suffix <- '_fullcohort';
+  if (phase0b.only) {
+    submax.long.data <- submax.long.data[! submax.long.data$Study.ID %in% c('EX001', 'EX002', 'EX003'), ];
+    suffix <- '_phase0b.only';
+  }
+
   bl.submax <- submax.long.data$Time.to.submax[submax.long.data$Session == 'BL'];
   fu.submax <- submax.long.data$Time.to.submax[submax.long.data$Session == 'FU'];
 
@@ -44,7 +52,7 @@ submax.analysis <- function(
 
   filename <- file.path(
     plot.path,
-    generate.filename('digIT-EX', file.core = 'full_cohort_submax', extension = extension)
+    generate.filename('digIT-EX', file.core = paste0('full_cohort_submax', suffix), extension = extension)
     );
   print(sprintf('Plotting to: %s', filename));
 
@@ -83,7 +91,7 @@ submax.analysis <- function(
     sprintf('t-test p = %.3f', t.test.results$p.value),
     sprintf('mean difference (seconds): %.1f', t.test.estimate),
     sprintf('95%% CI [%.1f, %.1f]', t.test.ci[1], t.test.ci[2]),
-    sprintf("Cohen's d = %.2f", cohens.d)
+    sprintf('Cohen\'s d = %.2f', cohens.d)
     );
 
   t.test.text <- latticeExtra::layer(

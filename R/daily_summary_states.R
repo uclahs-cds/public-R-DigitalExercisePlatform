@@ -1,7 +1,8 @@
 #' Creates the 'Mean: XX' text for the multipanel percentile/boxplot for lifestyle states
-#' @param text.labels
-#' @param text.x
-#' @param text.y
+#' @param text.labels Text labels
+#' @param text.x text x location
+#' @param text.y text y location
+#' @param max.study.day Maximum study day
 state.week.text <- function(
   text.labels,
   text.x,
@@ -14,7 +15,7 @@ state.week.text <- function(
       y = .text.y,
       fontfamily = gotham.font,
       labels = .labels,
-      cex = 1.3
+      cex = 1.5
       ),
       data = list(
         # I don't really know how layer environment works
@@ -26,7 +27,19 @@ state.week.text <- function(
     );
   }
 
-#' Percentile plot
+#' Daily percentile plots
+#'
+#' @param daily.summary daily summary
+#' @param plot.path ouput path for plots
+#' @param extension plot extensions
+#' @param max.study.day Maximum study day to analyze
+#' @param watch.on.min Minimum number of watch on minutes to analyze
+#' @param smooth.percentiles Should the percentiles be a moving average?
+#' @param use.gotham.font Should Gotham font be used?
+#' @param mean.line Should mean line be added to the plot?
+#' @param add.week.text Should week text be added above the plots?
+#'
+#' @return
 #' @export
 daily.summary.percentile.plot <- function(
   daily.summary,
@@ -36,7 +49,8 @@ daily.summary.percentile.plot <- function(
   watch.on.min = 1440 - 180,
   smooth.percentiles = 1,
   use.gotham.font = TRUE,
-  mean.line = FALSE
+  mean.line = FALSE,
+  add.week.text = FALSE
   ) {
   daily.summary.watch.on <- daily.summary[with(daily.summary, nday <= max.study.day & watch.on.minutes > watch.on.min), ];
 
@@ -55,7 +69,7 @@ daily.summary.percentile.plot <- function(
     week.mean[[colname]] <- week.mean[[colname]] / 60;
 
     text.xat <- seq(3.5, max.study.day, by = 7);
-    text.labels <- paste0('Mean: ', round(week.mean[[colname]], 1));
+    text.labels <- sprintf('Mean: %.01f', week.mean[[colname]]);
 
     agg.formula <- as.formula(sprintf('%s ~ nday', colname))
     study.day.percentiles <- do.call(
@@ -94,9 +108,9 @@ daily.summary.percentile.plot <- function(
       xaxis.tck = xaxis.tck,
       xlimits = c(0, max.study.day + 1),
       ylimits = ylimits,
-      ylab.cex = 1.75,
+      ylab.cex = 2,
       xlab.label = '',
-      ylab.label = v,
+      ylab.label = paste0(v, ', Hours'),
       abline.v = c(1, seq(7, max.study.day, by = 7)),
       abline.lty = 2,
       abline.col = 'grey',
@@ -112,11 +126,14 @@ daily.summary.percentile.plot <- function(
     # Add the text at the same relative distance above plot
     text.y <- ylimits[2] + (ylimits[2] - ylimits[1]) * 0.05;
 
-    # Add the gotham font weekly text
-    lifestyle.plot <- lifestyle.plot + state.week.text(
+    if (add.week.text) {
+      # Add the gotham font weekly text
+      lifestyle.plot <- lifestyle.plot + state.week.text(
       text.labels,
       text.x = text.xat,
       text.y = text.y);
+      }
+
 
     # Add the 5% to 95% percentiles
     lifestyle.plot <- lifestyle.plot +
@@ -191,8 +208,6 @@ daily.summary.percentile.plot <- function(
     width = width,
     height = height,
     y.spacing = 0,
-    ylab.axis.padding = 3,
-    ylab.label = 'Hours',
     xlab.label = 'Study day'
     );
 

@@ -4,11 +4,17 @@
 #' @param random.slopes Should random slope be used per patient for `nday`? If the model is singular with a random slope then drop it from the model and refit.
 #' @param physiological.vars All of the physiological variables to build a LMM for
 #' @param physiological.vars All of the lifestyle state variables to build a LMM for
+#' @param scale.dependent Should dependent variable be scaled via scale(...)
+#' @param scale.nday Should day be scaled via scale(...)
+#' @param state.vars Names of the state variable names
+#' @param adjust.vars Other variables to include as covariates in lmer
+#'
 #' @return a list with `models` which contains the models and `model.summary` which contains a data frame summarising the model results
 model.linear.daily.summary <- function(
   daily.summary,
   random.slopes = TRUE,
   scale.dependent = TRUE,
+  scale.nday = FALSE,
   physiological.vars = c(
     'rest.hr.sleep.mean',
     'rest.cgm.sleep.mean',
@@ -25,6 +31,9 @@ model.linear.daily.summary <- function(
     v.dep <- v;
     if (scale.dependent) {
       v.dep <- sprintf('scale(%s)', v);
+      }
+    if (scale.nday) {
+      daily.summary$nday <- as.numeric(scale(daily.summary$nday));
       }
     formula.intercept <- as.formula(sprintf('%s ~ nday %s + (1 | patient)', v.dep, adjust.vars.str));
     if (random.slopes) {
@@ -58,6 +67,8 @@ model.linear.daily.summary <- function(
 
 #' Create a summary data frame for the fixed effects of a set of daily summary models
 #' @param cohort.models Daily summary models for physiological/lifestyle state variables
+#' @param level 1 - type I error rate
+#' @export
 daily.summary.model.summary <- function(cohort.models, level = 0.95) {
   do.call('rbind.data.frame', lapply(names(cohort.models), function(variable.name) {
     m <- cohort.models[[variable.name]];

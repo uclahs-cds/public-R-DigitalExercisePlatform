@@ -1,9 +1,9 @@
-library(DigITx);
+library(EXONC.DEXP);
 library(BoutrosLab.plotting.general);
 
 script.name <- 'adherence';
-data.folder <- Sys.getenv('DIGITX_HOME');
-if (data.folder == '') data.folder <- here::here('results');
+data.folder <- Sys.getenv('EXONC_HOME');
+if (data.folder == '') data.folder <- 'DEXP_results';
 
 analysis.init(
   data.folder = data.folder,
@@ -17,28 +17,103 @@ analysis.init(
     # Boxplot with the points shown (stripplot with a barplot overlaid), with columns for each data-type,
     # and then outlier points labeled with their patient numbers
     # Make a copy of the adherence data for Phase 0a patients
-    perc.phase0a.long <- adherence.perc.phase0a;
-    perc.phase0b.long <- adherence.perc.phase0b;
+    # perc.phase0a.long <- read.table(system.file('extdata', 'adherence_perc_phase0a.tsv', package = 'EXONC.DEXP'), header = TRUE, sep = '\t');
+    # perc.phase0b.long <- read.table(system.file('extdata', 'adherence_perc_phase0b.tsv', package = 'EXONC.DEXP'), header = TRUE, sep = '\t');
+    #
+    # perc.phase0a.long <- perc.phase0a.long[perc.phase0a.long$Variable != 'Sleep', ];
+    # perc.phase0b.long <- perc.phase0b.long[perc.phase0b.long$Variable != 'Sleep', ];
 
-    perc.phase0a.long <- perc.phase0a.long[perc.phase0a.long$Variable != 'Sleep', ];
-    perc.phase0b.long <- perc.phase0b.long[perc.phase0b.long$Variable != 'Sleep', ];
+    variable.names <- c('Exercise\nTherapy', 'Watch', 'Blood\nPressure', 'Scale');
 
-    adherence.boxplot(
-      x = perc.phase0a.long,
-      plot.path = plot.path,
-      extension = extension,
-      phase = 'phase0a',
-      use.gotham.font = TRUE,
-      variable.names = c('Exercise\nAttendance', 'Watch', 'Blood\nPressure', 'Scale')
+    adherence.path <- file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_Adherence_Phase0-1.xlsx');
+    adherence <- parse.adherence.xlsx(adherence.path);
+
+    dosage <- read.table(
+      file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_Dose_levels.tsv'),
+      header = TRUE
+      )
+
+    id.mapping <- read.study.id.mapping(original.names = FALSE);
+
+    # Switch back to original study id
+    adherence$study.id[startsWith(adherence$phase, '0')] <- id.mapping[as.character(adherence$study.id[startsWith(adherence$phase, '0')])]
+
+    write.table(
+      adherence,
+      file = file.path(data.folder, 'Phase1', 'processed_xlsx', 'PRESTO_Adherence_Phase0-1.tsv'),
+      sep = '\t',
+      row.names = FALSE
       );
 
+    adherence.long <- reshape(
+      data = adherence[, c('study.id', 'phase', 'attendance.percent', 'watch.percent', 'bp.percent', 'scale.percent')],
+      idvar = c('study.id', 'phase'),
+      varying = c('attendance.percent', 'watch.percent', 'bp.percent', 'scale.percent'),
+      v.names = 'Percent',
+      timevar = 'variable',
+      times = c('attendance', 'watch', 'bp', 'scale'),
+      direction = 'long'
+      );
+
+    adherence.long$Variable.factor <- factor(adherence.long$variable, levels = c('attendance', 'watch', 'bp', 'scale'));
+    adherence.long$Percent <- adherence.long$Percent * 100;
+
+    adherence.long.0b <- adherence.long[startsWith(adherence.long$phase, '0B'), ];
+    adherence.long.phase1 <- adherence.long[adherence.long$phase %in% c('1a', '0B - Prostate') , ];
+
+    # Add dosage
+    adherence.long.phase1 <- merge(adherence.long.phase1, dosage, by = 'study.id', all.x = TRUE)
+
     adherence.boxplot(
-      x = perc.phase0b.long,
+      x = adherence.long.0b,
       plot.path = plot.path,
       extension = extension,
       phase = 'phase0b',
-      use.gotham.font = TRUE,
-      variable.names = c('Exercise\nAttendance', 'Watch', 'Blood\nPressure', 'Scale')
+      use.gotham.font = FALSE,
+      variable.names = variable.names
       );
+
+    adherence.boxplot(
+      x = adherence.long.phase1,
+      plot.path = plot.path,
+      extension = extension,
+      phase = 'phase1',
+      use.gotham.font = FALSE,
+      variable.names = variable.names
+      );
+
+    dosages <- sort(unique(adherence.long.phase1$dose), na.last = NA)
+    dosage.colors <- colour.gradient('orange', length(dosages))
+    names(dosage.colors) <- dosages
+
+    adherence.long.phase1$Variable.factor.long <- adherence.long.phase1$Variable.factor
+    levels(adherence.long.phase1$Variable.factor.long) <- c('Exercise Therapy', 'Watch', 'Blood Pressure', 'Scale');
+
+    adherence.long.phase1$dose.fct <- as.factor(adherence.long.phase1$dose);
+    dose.adherence.boxplot <- adherence.boxplot(
+      x = adherence.long.phase1,
+      formula = Percent ~ dose.fct | Variable.factor.long,
+      main = 'Phase 0b - Prostate + Phase 1',
+      main.cex = 2,
+      extension = extension,
+      phase = 'phase1',
+      variable.names = dosages,
+      use.gotham.font = FALSE,
+      points.col = dosage.colors,
+      xlab.label = 'Dose'
+      );
+
+    dose.adherence.path <- file.path(
+        plot.path,
+        generate.filename('digIT-EX', file.core = paste0('1a_1b-prostate', '_adherence_dosage'), extension = 'png')
+        );
+    cat('Writing dose-adherence plot to: ', dose.adherence.path, '\n');
+    write.plot(
+      dose.adherence.boxplot,
+      width = 12,
+      height = 10,
+      resolution = 100,
+      filename = dose.adherence.path
+      )
     }
   );

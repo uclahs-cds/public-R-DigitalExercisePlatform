@@ -1,9 +1,9 @@
-library(DigITx);
+library(EXONC.DEXP);
 library(BoutrosLab.plotting.general);
 
 script.name <- 'cost_analysis';
-data.folder <- Sys.getenv('DIGITX_HOME');
-if (data.folder == '') data.folder <- here::here('results');
+data.folder <- Sys.getenv('EXONC_DEXP_HOME');
+if (data.folder == '') data.folder <- 'DEXP_results';
 
 analysis.init(
   data.folder = data.folder,
@@ -13,7 +13,7 @@ analysis.init(
     plot.path <- file.path(data.folder, 'plots', 'study_time_costs');
 
     cost.data <- read.table(
-      here::here('inst/data-raw/patient_cost_hours.tsv'),
+      system.file('extdata', 'patient_cost_hours.tsv', package = 'EXONC.DEXP'),
       sep = '\t',
       header = TRUE
       );

@@ -1,16 +1,18 @@
 #' Plot the daily summary heatmap for the physiological variables
 #'
-#' @param daily.summary
-#' @param max.study.day
-#' @param phase0b.only
-#' @param random.slopes
-#' @param moving.avg
-#' @param vars.nice.names
+#' @param daily.summary daily summary data frame
+#' @param max.study.day Maximum study day to analyze
+#' @param phase0b.only Should only phase0b cohort be used?
+#' @param random.slopes Should random slopes be used in lmer?
+#' @param moving.avg Number of points to use in moving average for heatmap. Use 0 for no moving average
+#' @param vars.nice.names Vector of nice variable names
 #' @param use.gotham.font Should gotham font be used?
+#' @param scale.dependent Should dependent variable be scaled via scale(...)
+#' @param physiological.vars Names for the physiological variables
 #'
 #' @return
 #' @export
-plot.daily.summary.physiological <- function(
+daily.summary.physiological.plot <- function(
   daily.summary,
   max.study.day = 49,
   phase0b.only = FALSE,
@@ -123,9 +125,9 @@ plot.daily.summary.physiological <- function(
     formula = variable ~ nday.ci.lower + nday.ci.upper,
     data = pvalue.effectsize.data,
     centers = pvalue.effectsize.data$effect.size,
+    symbol.cex = pmax(-log10(pvalue.effectsize.data$pvalue), 0.6),
     yaxis.lab = rep('', length(physiological.vars)),
     segments.lwd = 1.5,
-    symbol.cex = 1.5,
     xlab.cex = 1.5,
     xlab.label = 'Effect Size (Z-scale)',
     xaxis.tck = c(1, 0),

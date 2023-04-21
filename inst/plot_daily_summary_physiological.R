@@ -1,11 +1,11 @@
-library(DigITx);
+library(EXONC.DEXP);
 library(BoutrosLab.plotting.general);
 library(lme4);
 library(lmerTest);
 
 script.name <- 'daily_summary_physiological';
-data.folder <- Sys.getenv('DIGITX_HOME');
-if (data.folder == '') data.folder <- here::here('results');
+data.folder <- Sys.getenv('EXONC_DEXP_HOME');
+if (data.folder == '') data.folder <- 'DEXP_results';
 plot.path <- file.path(data.folder, 'plots', script.name);
 results.path <- file.path(data.folder, 'results', script.name);
 extension <- 'png';
@@ -17,13 +17,13 @@ analysis.init(
   expr = {
     daily.summary <- read.table(
       # TODO: Fix paths
-      here::here('inst/data-raw/daily_summary.tsv'),
+      system.file('extdata', 'daily_summary.tsv', package = 'EXONC.DEXP'),
       sep = '\t',
       header = TRUE
       );
 
     baseline.data <- read.table(
-      here::here('inst/data-raw/baseline_data.tsv'),
+      system.file('extdata', 'baseline_data.tsv', package = 'EXONC.DEXP'),
       sep = '\t',
       header = TRUE
       );
@@ -53,14 +53,14 @@ analysis.init(
       'Diastolic BP'
       );
 
-    full.cohort.models <- plot.daily.summary.physiological(
+    full.cohort.models <- daily.summary.physiological.plot(
       daily.summary,
       physiological.vars = physiological.vars,
       vars.nice.names = vars.nice.names,
       use.gotham.font = TRUE
       );
 
-    phase0b.models <- plot.daily.summary.physiological(
+    phase0b.models <- daily.summary.physiological.plot(
       daily.summary.phase0b,
       phase0b.only = TRUE,
       physiological.vars = physiological.vars,

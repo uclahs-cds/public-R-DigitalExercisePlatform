@@ -4,6 +4,7 @@ gotham.font <- 'iCiel Gotham Medium';
 #' Replaces the font in a BPG object with Gotham Medium font
 #'
 #' @param x BPG plot
+#' @param font Desired font
 #' @return Same BPG plot but with all fonts replaced with Gotham Medium
 replace.font <- function(x, font = gotham.font) {
   # Get the same default font
@@ -18,5 +19,5 @@ replace.font <- function(x, font = gotham.font) {
     }
 
   # Apply recursively
-  rapply(x, .replace.single, class = 'character', how = 'replace');
+  rapply(x, .replace.single, classes = 'character', how = 'replace');
   }

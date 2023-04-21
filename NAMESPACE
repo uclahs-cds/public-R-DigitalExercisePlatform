@@ -1,3 +1,4 @@
+S3method('remove.axis', 'trellis')
 exportPattern("^[[:alpha:]]+")
 importFrom("stats", "aggregate", "as.formula", "confint", "p.adjust",
            "quantile", "reshape", "t.test")

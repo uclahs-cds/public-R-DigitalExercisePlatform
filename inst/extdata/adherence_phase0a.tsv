@@ -1,0 +1,4 @@
+"Patient.ID"	"Activity.HR"	"Watch.Percent"	"Sleep"	"Sleep.Percent"	"BP"	"BP.Percent"	"Weight"	"Scale.Percent"	"Study.Days"	"Completed.Ex.sessions"	"Total.planned.sessions"	"Attendance.Percent"
+"EX001"	36	1	35	0.97	28	0.78	29	0.81	36	24	24	1
+"EX002"	43	1	41	0.95	33	0.77	32	0.74	43	29	30	0.97
+"EX003"	39	0.89	31	0.7	39	0.89	36	0.82	44	26	30	0.87
