@@ -15,32 +15,32 @@ remove.axis <- function(x, side = c('left', 'right', 'top', 'bottom')) {
 remove.axis.trellis <- function(x, side = c('left', 'right', 'top', 'bottom')) {
   user.side <- match.arg(side, several.ok = TRUE);
   .axis.func <- function(side, line.col, ...) {
-    if (side == "left" && ! side %in% user.side) {
+    if (side == 'left' && ! side %in% user.side) {
       grid.lines(
         x = c(0, 0),
         y = c(0, 1),
-        default.units = "npc"
+        default.units = 'npc'
         )
-    } else if (side == "right" && ! side %in% user.side) {
+    } else if (side == 'right' && ! side %in% user.side) {
       grid.lines(
         x = c(1, 1),
         y = c(0, 1),
-        default.units = "npc"
+        default.units = 'npc'
         )
-    } else if (side == "bottom" && ! side %in% user.side) {
+    } else if (side == 'bottom' && ! side %in% user.side) {
       grid.lines(
         x = c(0, 1),
         y = c(0, 0),
-        default.units = "npc"
+        default.units = 'npc'
         )
     } else if (side == 'top' && ! side %in% user.side) {
       grid.lines(
         x = c(0, 1),
         y = c(0, 0),
-        default.units = "npc"
+        default.units = 'npc'
         )
     }
-    axis.default(side = side, line.col = "black", ...)
+    axis.default(side = side, line.col = 'black', ...)
     }
     x$axis <- .axis.func;
     x$par.settings$axis.line$col <- 'transparent';

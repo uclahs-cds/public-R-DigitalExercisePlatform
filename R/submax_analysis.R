@@ -91,7 +91,7 @@ submax.analysis <- function(
     sprintf('t-test p = %.3f', t.test.results$p.value),
     sprintf('mean difference (seconds): %.1f', t.test.estimate),
     sprintf('95%% CI [%.1f, %.1f]', t.test.ci[1], t.test.ci[2]),
-    sprintf("Cohen's d = %.2f", cohens.d)
+    sprintf('Cohen\'s d = %.2f', cohens.d)
     );
 
   t.test.text <- latticeExtra::layer(
