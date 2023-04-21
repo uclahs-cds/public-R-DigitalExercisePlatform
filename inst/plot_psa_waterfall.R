@@ -66,7 +66,9 @@ analysis.init(
       dummy.data
     )
 
-    create.barplot(
+    xlimits <- max(abs(psa.data$psa.delta)) * c(-1, 1) + c(-0.05, 0.05);
+    xat <- seq(-6, 6, by = 1);
+    waterfall.grouped.plot <- create.barplot(
         y ~ psa.delta,
         data = psa.data.dummy,
         col = psa.data.dummy$col,
@@ -78,22 +80,33 @@ analysis.init(
         disable.factor.sorting = TRUE,
         yaxis.tck = 0,
         xaxis.tck = c(1, 0),
-        width = 8,
-        height = 10,
-        resolution = 250,
-        xlimits = range(psa.data.dummy$psa.delta) + c(-0.05, 0.05),
-        filename = file.path(
-          plot.path,
-          generate.filename('digIT-EX', file.core = 'PSA_dose_waterfall', extension = 'png')
+        xlimits = xlimits,
+        xat = xat
+        );
+
+    waterfall.grouped.plot <- remove.axis(waterfall.grouped.plot, side = c('left', 'right', 'top'))
+
+    write.plot(
+      waterfall.grouped.plot,
+      width = 8,
+      height = 10,
+      resolution = 500,
+      filename = file.path(
+        plot.path,
+        generate.filename(
+          'digIT-EX',
+          file.core = 'PSA_dose_waterfall_grouped',
+          extension = 'png'
           )
         )
+      )
 
     # Reset y
     # Sort by delta
     psa.data <- psa.data[order(-psa.data$psa.delta), ]
     psa.data$y <- 1:nrow(psa.data)
 
-    create.barplot(
+    waterfall.plot <- create.barplot(
         y ~ psa.delta,
         data = psa.data,
         col = psa.data$col,
@@ -104,14 +117,21 @@ analysis.init(
         disable.factor.sorting = TRUE,
         yaxis.tck = 0,
         xaxis.tck = c(1, 0),
-        width = 8,
-        height = 10,
-        resolution = 250,
-        xlimits = max(abs(psa.data$psa.delta)) * c(-1, 1) + c(-0.05, 0.05),
-        filename = file.path(
-          plot.path,
-          generate.filename('digIT-EX', file.core = 'PSA_dose_waterfall_delta_ordered', extension = 'png')
-          )
+        xlimits = xlimits,
+        xat = xat
         )
+
+    waterfall.plot <- remove.axis(waterfall.plot, side = c('left', 'right', 'top'))
+
+    write.plot(
+      waterfall.plot,
+      width = 8,
+      height = 10,
+      resolution = 250,
+      filename = file.path(
+        plot.path,
+        generate.filename('digIT-EX', file.core = 'PSA_dose_waterfall_delta_ordered', extension = 'png')
+        )
+      )
     }
   )
