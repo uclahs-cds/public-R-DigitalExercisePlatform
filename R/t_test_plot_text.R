@@ -12,7 +12,7 @@ ttest.plot.text <- function(
     panel.x,
     panel.y,
     paired = FALSE,
-    use.gotham.font = TRUE,
+    use.gotham.font = FALSE,
     ...
     ) {
 
@@ -39,7 +39,7 @@ ttest.plot.text <- function(
   cohens.d <- cohens.d * sign(t.test.estimate);
 
   test.text.labels <- c(
-    sprintf('t-test p = %.5f', t.test.results$p.value),
+    # sprintf('t-test p = %.5f', t.test.results$p.value),
     sprintf('mean difference (hours): %.1f', t.test.estimate),
     sprintf('95%% CI [%.1f, %.1f]', t.test.ci[1], t.test.ci[2]),
     sprintf('Cohen\'s d = %.1f', cohens.d)

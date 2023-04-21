@@ -10,11 +10,13 @@
 #' @export
 study.hours.plot <- function(
   cost.data,
-  plot.path,
-  extension,
+  plot.path = NULL,
+  extension = c('png', 'pdf'),
   add.t.test.text = TRUE,
-  use.gotham.font = TRUE,
+  use.gotham.font = FALSE,
+  suffix = '',
   ...) {
+  write.plot <- ! is.null(plot.path);
   EXONC.DEXP.hours <- cbind(cost.data[, c('Patient', 'patient.id', 'EXONC.DEXP.Time.total.hrs')], study = 1);
   colnames(EXONC.DEXP.hours) <- c('Patient', 'patient.id', 'hours', 'study');
   trad.hours <- cbind(cost.data[, c('Patient', 'patient.id', 'Traditional.Time.total.hrs')], study = 0);
@@ -25,19 +27,12 @@ study.hours.plot <- function(
     trad.hours
     );
 
-  time.df$phase0b <- ifelse(as.numeric(time.df$Patient >= 4), TRUE, FALSE);
-
   height <- 6;
   width <- 6;
-  filename <- file.path(
-    plot.path,
-    generate.filename('digIT-EX', file.core = 'phase0b_boxplot_study_hours', extension = extension)
-    );
-  print(sprintf('Plotting to: %s', filename));
 
-  hours.plot <- create.boxplot(
+  hours.plot <- BoutrosLab.plotting.general::create.boxplot(
     formula = hours ~ as.factor(study),
-    data = time.df[time.df$phase0b == 1, ],
+    data = time.df,
     add.stripplot = TRUE,
     ylab.label = 'Estimated Time Commitment, Hours',
     xlab.label = '',
@@ -64,12 +59,31 @@ study.hours.plot <- function(
     hours.plot <- hours.plot + t.test.layer;
     }
 
-  BoutrosLab.plotting.general::write.plot(
-    trellis.object = hours.plot,
-    filename = filename,
-    height = height,
-    width = width
-    );
+  if (!is.null(suffix) && suffix != '') {
+    suffix <- paste0('_', suffix)
+    }
+
+  if(write.plot) {
+    filename <- file.path(
+      plot.path,
+      generate.filename(
+        'digIT-EX',
+        file.core = paste0('phase0b_boxplot_study_hours', suffix),
+        extension = extension
+        )
+      );
+    print(sprintf('Plotting to: %s', filename));
+
+    BoutrosLab.plotting.general::write.plot(
+      trellis.object = hours.plot,
+      filename = filename,
+      height = height,
+      width = width
+      );
+    invisible(hours.plot);
+    } else {
+    return(hours.plot);
+    }
   }
 
 #' Creates the estimated total cost boxplot plot for EXONC.DEXP
@@ -83,25 +97,21 @@ study.hours.plot <- function(
 #' @export
 total.cost.plot <- function(
   cost.data,
-  plot.path,
-  extension,
-  use.gotham.font = TRUE,
+  plot.path = NULL,
+  extension = c('png', 'pdf'),
+  use.gotham.font = FALSE,
+  height = 6,
+  width = 6,
+  suffix = '',
   ...) {
+  write.plot <- ! is.null(plot.path);
+  cost.data$phase0b <- ifelse(cost.data$Patient <= 3, FALSE, TRUE);
   phase.0b.costs <- cbind(cost.data[cost.data$phase0b, 'Total.Cost', drop = FALSE], group = 1);
   # Add the EXONC.DEXP costs as '0'
   phase.0b.costs <- rbind(phase.0b.costs, c(0, 2));
 
-  height <- 6;
-  width <- 6;
-
-  filename <- file.path(
-    plot.path,
-    generate.filename('digIT-EX', file.core = 'phase0b_boxplot_total_cost', extension = extension)
-    );
-  print(sprintf('Plotting to: %s', filename));
-
   # phase.0b.costs
-  cost.plot <- create.boxplot(
+  cost.plot <- BoutrosLab.plotting.general::create.boxplot(
     Total.Cost ~ as.factor(group),
     data = phase.0b.costs,
     add.stripplot = TRUE,
@@ -114,14 +124,33 @@ total.cost.plot <- function(
     cost.plot <- replace.font(cost.plot, font = gotham.font);
     }
 
-  BoutrosLab.plotting.general::write.plot(
+  if (!is.null(suffix) && suffix != '') {
+    suffix <- paste0('_', suffix)
+    }
+
+  if (write.plot) {
+    filename <- file.path(
+      plot.path,
+      generate.filename(
+        'digIT-EX',
+        file.core = paste0('phase0b_boxplot_total_cost', suffix),
+        extension = extension
+        )
+      );
+    print(sprintf('Plotting to: %s', filename));
+
+    BoutrosLab.plotting.general::write.plot(
     trellis.object = cost.plot,
     filename = filename,
     height = height,
     width = width
     );
 
-  invisible(cost.plot);
+    invisible(cost.plot);
+    } else {
+    return(cost.plot);
+    }
+
   }
 
 #' Full cost/hour analysis
@@ -129,18 +158,25 @@ total.cost.plot <- function(
 #' @param plot.path output plot path
 #' @param extension plot extension
 #' @param color.points Should plots be colored by `plot.color` column?
-cost.hour.analysis <- function(cost.data, plot.path, extension = 'png', color.points = FALSE) {
+cost.hour.analysis <- function(
+    cost.data,
+    plot.path,
+    extension = 'png',
+    color.points = FALSE,
+    suffix = '',
+    ...
+    ) {
   # BPG Parameters
   bpg.shared <- list(
     points.cex = 1,
     ylab.cex = 1.7,
     ylab.axis.padding = 3,
     points.col = if (color.points) cost.data$plot.color else 'darkgrey',
-    xaxis.lab = c('Virtual\nTwin', 'DEXP'),
-    extension = extension
+    xaxis.lab = c('Virtual\nTwin', 'DPEx'),
+    extension = extension,
+    suffix = suffix,
+    ...
     );
-
-  cost.data$phase0b <- ifelse(as.numeric(cost.data$Patient >= 4), TRUE, FALSE);
 
   bpg.shared$cost.data <- cost.data;
   bpg.shared$plot.path <- plot.path;
