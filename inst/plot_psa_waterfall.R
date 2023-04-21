@@ -68,7 +68,7 @@ analysis.init(
     )
 
     xlimits <- range(psa.data$psa.delta) + c(-0.05, 0.05);
-    xat <- seq(-6, 9, by = 1);
+    xat <- seq(-6, 9, by = 2);
     waterfall.grouped.plot <- create.barplot(
         psa.delta ~ y,
         data = psa.data.dummy,
@@ -76,7 +76,7 @@ analysis.init(
         xat = seq(1, max(psa.data.dummy$y)),
         plot.horizontal = FALSE,
         xlab.label = 'Patient',
-        ylab.label = 'PSA Delta',
+        ylab.label = expression(bold('PSA'~Delta)),
         xaxis.lab = rep('', nrow(psa.data.dummy)),
         disable.factor.sorting = TRUE,
         xaxis.tck = 0,
@@ -113,7 +113,7 @@ analysis.init(
         col = psa.data$col,
         plot.horizontal = FALSE,
         xlab.label = 'Patient',
-        ylab.label = 'PSA Delta',
+        ylab.label = expression(bold('PSA'~Delta)),
         xaxis.lab = rep('', nrow(psa.data)),
         disable.factor.sorting = TRUE,
         xaxis.tck = 0,
