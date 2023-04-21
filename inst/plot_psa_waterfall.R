@@ -61,16 +61,42 @@ analysis.init(
       col = 'transparent'
     )
 
-    psa.data <- plyr::rbind.fill(
+    psa.data.dummy <- plyr::rbind.fill(
       psa.data,
       dummy.data
     )
 
     create.barplot(
         y ~ psa.delta,
+        data = psa.data.dummy,
+        col = psa.data.dummy$col,
+        yat = seq(1, max(psa.data.dummy$y)),
+        plot.horizontal = TRUE,
+        ylab.label = 'Patient',
+        xlab.label = 'PSA Delta',
+        yaxis.lab = rep('', nrow(psa.data.dummy)),
+        disable.factor.sorting = TRUE,
+        yaxis.tck = 0,
+        xaxis.tck = c(1, 0),
+        width = 8,
+        height = 10,
+        resolution = 250,
+        xlimits = range(psa.data.dummy$psa.delta) + c(-0.05, 0.05),
+        filename = file.path(
+          plot.path,
+          generate.filename('digIT-EX', file.core = 'PSA_dose_waterfall', extension = 'png')
+          )
+        )
+
+    # Reset y
+    # Sort by delta
+    psa.data <- psa.data[order(-psa.data$psa.delta), ]
+    psa.data$y <- 1:nrow(psa.data)
+
+    create.barplot(
+        y ~ psa.delta,
         data = psa.data,
         col = psa.data$col,
-        yat = seq(1, max(psa.data$y)),
         plot.horizontal = TRUE,
         ylab.label = 'Patient',
         xlab.label = 'PSA Delta',
@@ -81,10 +107,10 @@ analysis.init(
         width = 8,
         height = 10,
         resolution = 250,
-        xlimits = range(psa.data$psa.delta) + c(-0.05, 0.05),
+        xlimits = max(abs(psa.data$psa.delta)) * c(-1, 1) + c(-0.05, 0.05),
         filename = file.path(
           plot.path,
-          generate.filename('digIT-EX', file.core = 'PSA_dose_waterfall', extension = 'png')
+          generate.filename('digIT-EX', file.core = 'PSA_dose_waterfall_delta_ordered', extension = 'png')
           )
         )
     }
