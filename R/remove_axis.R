@@ -36,13 +36,13 @@ remove.axis.trellis <- function(x, side = c('left', 'right', 'top', 'bottom')) {
     } else if (side == 'top' && ! side %in% user.side) {
       grid.lines(
         x = c(0, 1),
-        y = c(0, 0),
+        y = c(1, 1),
         default.units = 'npc'
         )
-    }
-    axis.default(side = side, line.col = 'black', ...)
+      }
+      axis.default(side = side, line.col = 'black', ...)
     }
     x$axis <- .axis.func;
     x$par.settings$axis.line$col <- 'transparent';
     return(x);
-}
+  }
