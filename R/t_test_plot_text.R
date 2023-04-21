@@ -15,6 +15,7 @@ ttest.plot.text <- function(
     use.gotham.font = TRUE,
     ...
     ) {
+
   method <- if (paired) 'paired' else 'pooled'
 
   t.test.results <- stats::t.test(
@@ -41,7 +42,7 @@ ttest.plot.text <- function(
     sprintf('t-test p = %.5f', t.test.results$p.value),
     sprintf('mean difference (hours): %.1f', t.test.estimate),
     sprintf('95%% CI [%.1f, %.1f]', t.test.ci[1], t.test.ci[2]),
-    sprintf('Cohen's d = %.1f', cohens.d)
+    sprintf('Cohen\'s d = %.1f', cohens.d)
     );
 
   test.text.labels <- paste0(test.text.labels, collapse = '\n');
