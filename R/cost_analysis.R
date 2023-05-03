@@ -63,7 +63,7 @@ study.hours.plot <- function(
     suffix <- paste0('_', suffix)
     }
 
-  if(write.plot) {
+  if (write.plot) {
     filename <- file.path(
       plot.path,
       generate.filename(
