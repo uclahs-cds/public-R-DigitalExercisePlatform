@@ -13,12 +13,21 @@ analysis.init(
     extension <- 'png';
     plot.path <- file.path(data.folder, 'plots', script.name);
 
-    psa.dose <- read.table(
-      file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_PSA_by_dose.tsv'),
+    # psa.dose.old <- read.table(
+    #   file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_PSA_by_dose.tsv'),
+    #   header = TRUE
+    #   )
+    psa.ki67.dose <- read.table(
+      file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_ki67_PSA_data_prostate_FINAL.tsv'),
       header = TRUE
-      )
-    colnames(psa.dose) <- gsub('[.]$', '', tolower(colnames(psa.dose)))
-    colnames(psa.dose) <- gsub('[.]+', '.', colnames(psa.dose))
+    )
+    colnames(psa.ki67.dose) <- gsub('[.]$', '', tolower(colnames(psa.ki67.dose)))
+    colnames(psa.ki67.dose) <- gsub('[.]+', '.', colnames(psa.ki67.dose))
+
+    psa.dose <- psa.ki67.dose[
+      !is.na(psa.ki67.dose$psa.delta),
+      c('study.id', 'dose', 'bl.psa.ng.ml', 'fu.psa.ng.ml', 'psa.delta')
+      ]
 
     psa.control <- read.table(
       file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_PSA_control_data.tsv'),
@@ -29,8 +38,8 @@ analysis.init(
     # Artificial study id
     psa.control$study.id <- seq(max(psa.dose$study.id), max(psa.dose$study.id) + nrow(psa.control) - 1, by = 1) + 100
 
-    colnames(psa.dose) <- gsub('[.]$', '', tolower(colnames(psa.dose)))
-    colnames(psa.dose) <- gsub('[.]+', '.', colnames(psa.dose))
+    # colnames(psa.dose) <- gsub('[.]$', '', tolower(colnames(psa.dose)))
+    # colnames(psa.dose) <- gsub('[.]+', '.', colnames(psa.dose))
 
     common.cols <- c('study.id' , 'bl.psa.ng.ml', 'fu.psa.ng.ml', 'dose')
     psa.data <- rbind(
@@ -38,60 +47,15 @@ analysis.init(
       psa.control[, common.cols]
       )
 
-    psa.data$dose.fct <- factor(psa.data$dose, levels = c('control', unique(psa.dose$dose)))
-    psa.data$psa.delta <- psa.data$fu.psa.ng.ml - psa.data$bl.psa.ng.ml
-    psa.data$psa.percent <- psa.data$psa.delta / psa.data$bl.psa.ng.ml
-
-    psa.data <- psa.data[order(as.integer(psa.data$dose.fct), -psa.data$psa.delta), ]
-    rownames(psa.data) <- NULL
+    psa.data$delta <- psa.data$fu.psa.ng.ml - psa.data$bl.psa.ng.ml
 
     dose.colors <- c('white', colour.gradient('royalblue', 6))
-    names(dose.colors) <- levels(psa.data$dose.fct)
-
-    # Split and combine
-    # Stack on top of each other
-
-    # psa.data$y <- 1:nrow(psa.data) + (7 - as.numeric(psa.data$dose.fct))
-    psa.data$y <- 1:nrow(psa.data) + (as.numeric(psa.data$dose.fct) - 1)
-
+    names(dose.colors) <- c('control', unique(psa.dose$dose))
     psa.data$col <- dose.colors[psa.data$dose]
 
-    dummy.data <- data.frame(
-      y = setdiff(seq(1, max(psa.data$y, na.rm = T)), psa.data$y),
-      psa.delta = NA,
-      col = 'transparent'
-    )
-
-    psa.data.dummy <- plyr::rbind.fill(
+    plot.delta.waterfall(
       psa.data,
-      dummy.data
-    )
-
-    xlimits <- range(psa.data$psa.delta) + c(-0.05, 0.05);
-    xat <- seq(-6, 9, by = 2);
-    waterfall.grouped.plot <- create.barplot(
-        psa.delta ~ y,
-        data = psa.data.dummy,
-        col = psa.data.dummy$col,
-        xat = seq(1, max(psa.data.dummy$y)),
-        plot.horizontal = FALSE,
-        xlab.label = 'Patient',
-        ylab.label = expression(bold('PSA'~Delta)),
-        xaxis.lab = rep('', nrow(psa.data.dummy)),
-        disable.factor.sorting = TRUE,
-        xaxis.tck = 0,
-        yaxis.tck = c(1, 0),
-        ylimits = xlimits,
-        yat = xat
-        );
-
-    waterfall.grouped.plot <- remove.axis(waterfall.grouped.plot, side = c('bottom', 'right', 'top'))
-
-    write.plot(
-      waterfall.grouped.plot,
-      width = 12,
-      height = 10,
-      resolution = 500,
+      variable = 'PSA',
       filename = file.path(
         plot.path,
         generate.filename(
@@ -100,39 +64,61 @@ analysis.init(
           extension = 'png'
           )
         )
-      )
+    )
+
+    ki67.data <- psa.ki67.dose[
+      !is.na(psa.ki67.dose$ki67.delta),
+      c('study.id', 'dose', 'bl.ki67.positivity', 'fu.ki67.positivity', 'ki67.delta')
+      ];
+
+    ki67.data$delta <- ki67.data$ki67.delta;
+    ki67.data$ki67.delta <- NULL;
+    ki67.data$col <- dose.colors[as.character(ki67.data$dose)];
+
+    plot.delta.waterfall(
+      ki67.data,
+      variable = 'ki67',
+      filename = file.path(
+        plot.path,
+        generate.filename(
+          'digIT-EX',
+          file.core = 'ki67_dose_waterfall_grouped',
+          extension = 'png'
+          )
+        )
+    );
 
     # Reset y
     # Sort by delta
-    psa.data <- psa.data[order(-psa.data$psa.delta), ]
-    psa.data$y <- 1:nrow(psa.data)
-
-    waterfall.plot <- create.barplot(
-        psa.delta ~ y,
-        data = psa.data,
-        col = psa.data$col,
-        plot.horizontal = FALSE,
-        xlab.label = 'Patient',
-        ylab.label = expression(bold('PSA'~Delta)),
-        xaxis.lab = rep('', nrow(psa.data)),
-        disable.factor.sorting = TRUE,
-        xaxis.tck = 0,
-        yaxis.tck = c(1, 0),
-        ylimits = xlimits,
-        yat = xat
-        )
-
-    waterfall.plot <- remove.axis(waterfall.plot, side = c('bottom', 'right', 'top'))
-
-    write.plot(
-      waterfall.plot,
-      width = 12,
-      height = 10,
-      resolution = 500,
-      filename = file.path(
-        plot.path,
-        generate.filename('digIT-EX', file.core = 'PSA_dose_waterfall_delta_ordered', extension = 'png')
-        )
-      )
+    # psa.data <- psa.data[order(-psa.data$psa.delta), ]
+    # psa.data$y <- 1:nrow(psa.data)
+    #
+    # waterfall.plot <- create.barplot(
+    #     psa.delta ~ y,
+    #     data = psa.data,
+    #     col = psa.data$col,
+    #     plot.horizontal = FALSE,
+    #     xlab.label = 'Patient',
+    #     ylab.label = expression(bold('PSA'~Delta)),
+    #     xaxis.lab = rep('', nrow(psa.data)),
+    #     disable.factor.sorting = TRUE,
+    #     xaxis.tck = 0,
+    #     yaxis.tck = c(1, 0),
+    #     ylimits = xlimits,
+    #     yat = xat
+    #     )
+    #
+    # waterfall.plot <- remove.axis(waterfall.plot, side = c('bottom', 'right', 'top'))
+    #
+    # write.plot(
+    #   waterfall.plot,
+    #   width = 12,
+    #   height = 10,
+    #   resolution = 500,
+    #   filename = file.path(
+    #     plot.path,
+    #     generate.filename('digIT-EX', file.core = 'PSA_dose_waterfall_delta_ordered', extension = 'png')
+    #     )
+    #   )
     }
   )
