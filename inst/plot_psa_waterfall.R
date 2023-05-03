@@ -75,6 +75,30 @@ analysis.init(
     ki67.data$ki67.delta <- NULL;
     ki67.data$col <- dose.colors[as.character(ki67.data$dose)];
 
+    agg.res <- do.call(
+      'data.frame',
+      aggregate(psa.data$delta, by = list(psa.data$dose), function(x) c(mean = mean(x), sd = sd(x)))
+      );
+    rownames(agg.res) <- as.character(agg.res$Group.1);
+
+    agg.res.ki67 <- do.call(
+      'data.frame',
+      aggregate(ki67.data$delta, by = list(ki67.data$dose), function(x) c(mean = mean(x), sd = sd(x)))
+      );
+    rownames(agg.res.ki67) <- as.character(agg.res.ki67$Group.1);
+
+    kableExtra::kable_styling(kableExtra::kable(
+      agg.res[names(dose.colors), ],
+      col.names = c('dose', 'mean(delta-PSA)', 'sd(delta-PSA)'),
+      row.names = FALSE
+      ))
+
+    kableExtra::kable_styling(kableExtra::kable(
+      agg.res.ki67[setdiff(names(dose.colors), 'control'), ],
+      col.names = c('dose', 'mean(delta-ki67)', 'sd(delta-ki67)'),
+      row.names = FALSE
+      ))
+
     plot.delta.waterfall(
       ki67.data,
       variable = 'ki67',
