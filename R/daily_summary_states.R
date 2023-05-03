@@ -48,7 +48,7 @@ daily.summary.percentile.plot <- function(
   max.study.day = 49,
   watch.on.min = 1440 - 180,
   smooth.percentiles = 1,
-  use.gotham.font = TRUE,
+  use.gotham.font = FALSE,
   mean.line = FALSE,
   add.week.text = FALSE
   ) {

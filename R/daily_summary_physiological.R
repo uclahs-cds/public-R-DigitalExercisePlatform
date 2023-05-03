@@ -19,7 +19,7 @@ daily.summary.physiological.plot <- function(
   random.slopes = TRUE,
   moving.avg = 1,
   scale.dependent = TRUE,
-  use.gotham.font = TRUE,
+  use.gotham.font = FALSE,
   physiological.vars = c(
     'rest.hr.sleep.mean',
     'rest.cgm.sleep.mean',
@@ -125,7 +125,7 @@ daily.summary.physiological.plot <- function(
     formula = variable ~ nday.ci.lower + nday.ci.upper,
     data = pvalue.effectsize.data,
     centers = pvalue.effectsize.data$effect.size,
-    symbol.cex = pmax(-log10(pvalue.effectsize.data$pvalue), 0.6),
+    # symbol.cex = pmax(-log10(pvalue.effectsize.data$pvalue), 0.6),
     yaxis.lab = rep('', length(physiological.vars)),
     segments.lwd = 1.5,
     xlab.cex = 1.5,

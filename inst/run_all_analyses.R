@@ -2,7 +2,7 @@ library(EXONC.DEXP);
 library(BoutrosLab.plotting.general);
 
 script.name <- 'run_all_analyses';
-data.folder <- Sys.getenv('EXONC_DEXP_HOME');
+data.folder <- Sys.getenv('EXONC_HOME');
 if (data.folder == '') data.folder <- 'DEXP_results';
 
 analysis.init(

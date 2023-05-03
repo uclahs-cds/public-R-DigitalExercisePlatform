@@ -2,7 +2,7 @@ library(EXONC.DEXP);
 library(BoutrosLab.plotting.general);
 
 script.name <- 'daily_summary_states';
-data.folder <- Sys.getenv('EXONC_DEXP_HOME');
+data.folder <- Sys.getenv('EXONC_HOME');
 if (data.folder == '') data.folder <- 'DEXP_results';
 plot.path <- file.path(data.folder, 'plots', script.name);
 
@@ -20,7 +20,7 @@ analysis.init(
     daily.summary.percentile.plot(
       daily.summary = daily.summary,
       plot.path = plot.path,
-      use.gotham.font = TRUE,
+      use.gotham.font = FALSE,
       extension = 'png'
       );
     }

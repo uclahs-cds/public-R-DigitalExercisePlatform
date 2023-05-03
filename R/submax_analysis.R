@@ -14,7 +14,7 @@ submax.analysis <- function(
   plot.path,
   extension = 'png',
   color.points = FALSE,
-  use.gotham.font = TRUE,
+  use.gotham.font = FALSE,
   phase0b.only = TRUE,
   ...) {
 
@@ -88,7 +88,7 @@ submax.analysis <- function(
   t.test.ci <- t.test.results$conf.int;
   t.test.estimate <- unname(t.test.results$estimate);
   test.text.labels <- c(
-    sprintf('t-test p = %.3f', t.test.results$p.value),
+    # sprintf('t-test p = ', t.test.results$p.value),
     sprintf('mean difference (seconds): %.1f', t.test.estimate),
     sprintf('95%% CI [%.1f, %.1f]', t.test.ci[1], t.test.ci[2]),
     sprintf('Cohen\'s d = %.2f', cohens.d)
