@@ -8,10 +8,15 @@ plot.delta.waterfall <- function(
     ...) {
     variable <- match.arg(variable);
     x$dose.fct <- factor(x$dose, levels = c('control', sort(unique(x$dose))))
-    x <- x[order(as.integer(x$dose.fct), -x$delta), ]
+    if (variable == 'adherence') {
+      x <- x[order(-as.integer(x$dose.fct), x$delta), ]
+      x$y <- 1:nrow(x) + (7 - as.numeric(x$dose.fct))
+    } else {
+      x <- x[order(as.integer(x$dose.fct), -x$delta), ]
+      x$y <- 1:nrow(x) + (as.numeric(x$dose.fct) - 1)
+    }
     rownames(x) <- NULL
     # psa.data$y <- 1:nrow(psa.data) + (7 - as.numeric(psa.data$dose.fct))
-    x$y <- 1:nrow(x) + (as.numeric(x$dose.fct) - 1)
 
     if (! 'col' %in% names(x)) {
       x$col <- dose.colors[as.character(x$dose)];
@@ -33,8 +38,9 @@ plot.delta.waterfall <- function(
 
     if (variable == 'adherence') {
       by <- 10;
-      xlimits <- c(0, max(x$delta) + 0.05);
-      xat <- seq(0, max(x$delta), by = by);
+      round.max <- ceiling(max(x$delta) / 10) * 10;
+      xlimits <- c(0, round.max + 0.05);
+      xat <- seq(0, round.max, by = by);
       ylab.label <- 'Exercise sessions';
     } else {
       if (variable == 'PSA') by <- 2;
@@ -48,7 +54,27 @@ plot.delta.waterfall <- function(
       ylab.label <- bquote(bold(.(variable)~Delta));
     }
 
-    waterfall.grouped.plot <- create.barplot(
+    if (variable == 'adherence') {
+      waterfall.grouped.plot <- create.barplot(
+        y ~ delta,
+        data = x.dummy,
+        col = if ('col' %in% names(x.dummy)) x.dummy$col else 'black',
+        yat = seq(1, max(x.dummy$y)),
+        plot.horizontal = TRUE,
+        ylab.label = 'Patient',
+        xlab.label = ylab.label,
+        yaxis.lab = rep('', nrow(x.dummy)),
+        disable.factor.sorting = TRUE,
+        yaxis.tck = 0,
+        xaxis.tck = c(1, 0),
+        xlimits = xlimits,
+        xat = xat,
+        ...
+        );
+
+      waterfall.grouped.plot <- remove.axis(waterfall.grouped.plot, side = c('left', 'right', 'top'))
+    } else {
+      waterfall.grouped.plot <- create.barplot(
         delta ~ y,
         data = x.dummy,
         col = if ('col' %in% names(x.dummy)) x.dummy$col else 'black',
@@ -65,7 +91,9 @@ plot.delta.waterfall <- function(
         ...
         );
 
-    waterfall.grouped.plot <- remove.axis(waterfall.grouped.plot, side = c('bottom', 'right', 'top'))
+      waterfall.grouped.plot <- remove.axis(waterfall.grouped.plot, side = c('bottom', 'right', 'top'))
+    }
+
 
     if (!is.null(filename)) {
       write.plot(
