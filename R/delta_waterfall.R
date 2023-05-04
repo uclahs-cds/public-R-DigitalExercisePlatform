@@ -3,14 +3,19 @@ plot.delta.waterfall <- function(
     width = 12,
     height = 10,
     resolution = 500,
-    variable = c('PSA', 'ki67'),
+    variable = c('PSA', 'ki67', 'adherence'),
     filename = NULL,
     ...) {
-    x$dose.fct <- factor(x$dose, levels = c('control', unique(psa.dose$dose)))
+    variable <- match.arg(variable);
+    x$dose.fct <- factor(x$dose, levels = c('control', sort(unique(x$dose))))
     x <- x[order(as.integer(x$dose.fct), -x$delta), ]
     rownames(x) <- NULL
     # psa.data$y <- 1:nrow(psa.data) + (7 - as.numeric(psa.data$dose.fct))
     x$y <- 1:nrow(x) + (as.numeric(x$dose.fct) - 1)
+
+    if (! 'col' %in% names(x)) {
+      x$col <- dose.colors[as.character(x$dose)];
+      }
 
     # Dummy data to insert between groups
     dummy.data <- data.frame(
@@ -25,13 +30,23 @@ plot.delta.waterfall <- function(
     )
 
     xlimits <- range(x$delta) + c(-0.05, 0.05);
-    if (variable == 'PSA') by <- 2;
-    if (variable == 'ki67') by <- 4;
 
-    xat <- c(
-      seq(0, floor(xlimits[1]), by = -by),
-      seq(0, ceiling(xlimits[2]), by = by)
-      );
+    if (variable == 'adherence') {
+      by <- 10;
+      xlimits <- c(0, max(x$delta) + 0.05);
+      xat <- seq(0, max(x$delta), by = by);
+      ylab.label <- 'Exercise sessions';
+    } else {
+      if (variable == 'PSA') by <- 2;
+      if (variable == 'ki67') by <- 4;
+
+      xat <- c(
+        seq(0, floor(xlimits[1]), by = -by),
+        seq(0, ceiling(xlimits[2]), by = by)
+        );
+
+      ylab.label <- bquote(bold(.(variable)~Delta));
+    }
 
     waterfall.grouped.plot <- create.barplot(
         delta ~ y,
@@ -40,7 +55,7 @@ plot.delta.waterfall <- function(
         xat = seq(1, max(x.dummy$y)),
         plot.horizontal = FALSE,
         xlab.label = 'Patient',
-        ylab.label = bquote(bold(.(variable)~Delta)),
+        ylab.label = ylab.label,
         xaxis.lab = rep('', nrow(x.dummy)),
         disable.factor.sorting = TRUE,
         xaxis.tck = 0,

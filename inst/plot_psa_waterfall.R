@@ -13,10 +13,6 @@ analysis.init(
     extension <- 'png';
     plot.path <- file.path(data.folder, 'plots', script.name);
 
-    # psa.dose.old <- read.table(
-    #   file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_PSA_by_dose.tsv'),
-    #   header = TRUE
-    #   )
     psa.ki67.dose <- read.table(
       file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_ki67_PSA_data_prostate_FINAL.tsv'),
       header = TRUE

@@ -154,5 +154,52 @@ analysis.init(
       resolution = 250,
       filename = dose.adherence.path.ET
       )
+
+    # Plot the completed sessions in waterfall plot
+    adherence.phase1.waterfall <- adherence[
+      adherence$phase %in% c('1a', '0B - Prostate'),
+      c('study.id', 'phase', 'completed.exercise.sessions')
+      ];
+
+    dose.levels <- read.table(
+      file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_Dose_levels.tsv'),
+      header = TRUE
+    )
+
+    # Add dose data
+    adherence.phase1.waterfall <- merge(
+      x = adherence.phase1.waterfall,
+      y = dose.levels,
+      by = 'study.id',
+      all.x = TRUE
+      );
+
+    adherence.phase1.waterfall$delta <- adherence.phase1.waterfall$completed.exercise.sessions;
+
+    plot.delta.waterfall(
+      adherence.phase1.waterfall,
+      variable = 'adherence',
+      filename = file.path(
+        plot.path,
+        generate.filename(
+          'digIT-EX',
+          file.core = 'exercise_sessions_waterfall_grouped',
+          extension = 'png'
+          )
+        )
+      )
+
+    agg.res <- do.call(
+      'data.frame',
+      aggregate(
+        adherence.phase1.waterfall$delta,
+        by = adherence.phase1.waterfall[, c('phase.x', 'dose')],
+        function(x) c(median = median(x), min = min(x), max = max(x), n = length(x)))
+      );
+    colnames(agg.res) <- c('phase', 'dose', 'median', 'min', 'max', 'n');
+    kableExtra::kable_styling(kableExtra::kable(
+      agg.res,
+      row.names = FALSE
+      ))
     }
   );
