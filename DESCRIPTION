@@ -9,7 +9,8 @@ Depends:
     R (>= 2.10)
 Suggests: 
     performance,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    fs
 Config/testthat/edition: 3
 License: GPL-2
 Encoding: UTF-8

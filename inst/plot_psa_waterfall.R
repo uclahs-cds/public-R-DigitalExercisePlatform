@@ -1,7 +1,7 @@
 library(EXONC.DEXP);
 library(BoutrosLab.plotting.general);
 
-script.name <- 'waterfall';
+script.name <- 'psa_ki67';
 data.folder <- Sys.getenv('EXONC_HOME');
 if (data.folder == '') data.folder <- 'DEXP_results';
 
@@ -11,10 +11,10 @@ analysis.init(
   split.stdout = TRUE,
   expr = {
     extension <- 'png';
-    plot.path <- file.path(data.folder, 'plots', script.name);
+    plot.path <- file.path(data.folder, 'digIT-EX', 'plots', script.name);
 
     psa.ki67.dose <- read.table(
-      file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_ki67_PSA_data_prostate_FINAL.tsv'),
+      file.path(data.folder, 'raw_data', 'Phase1', 'PRESTO_ki67_PSA_data_prostate_FINAL.tsv'),
       header = TRUE
     )
     colnames(psa.ki67.dose) <- gsub('[.]$', '', tolower(colnames(psa.ki67.dose)))
@@ -26,7 +26,7 @@ analysis.init(
       ]
 
     psa.control <- read.table(
-      file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_PSA_control_data.tsv'),
+      file.path(data.folder, 'raw_data', 'Phase1', 'PRESTO_PSA_control_data.tsv'),
       header = TRUE
       )
     colnames(psa.control) <- c('bl.psa.ng.ml', 'fu.psa.ng.ml', 'days.between.psas');

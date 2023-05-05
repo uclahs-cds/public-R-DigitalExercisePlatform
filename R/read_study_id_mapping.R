@@ -1,6 +1,6 @@
 read.study.id.mapping <- function(original.names = TRUE) {
   mapping <- read.table(
-      file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_study_id_mapping.tsv'),
+      file.path(data.folder, 'raw_data', 'Phase1', 'PRESTO_study_id_mapping.tsv'),
       header = TRUE
       );
 

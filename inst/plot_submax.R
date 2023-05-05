@@ -1,10 +1,10 @@
 library(EXONC.DEXP);
 library(BoutrosLab.plotting.general);
 
-script.name <- 'submax.analysis';
+script.name <- 'submax_analysis';
 data.folder <- Sys.getenv('EXONC_HOME');
 if (data.folder == '') data.folder <- 'DEXP_results';
-plot.path <- file.path(data.folder, 'plots', script.name);
+plot.path <- file.path(data.folder, 'digIT-EX', 'plots', script.name);
 
 analysis.init(
   data.folder = data.folder,

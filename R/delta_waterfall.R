@@ -7,7 +7,13 @@ plot.delta.waterfall <- function(
     filename = NULL,
     ...) {
     variable <- match.arg(variable);
-    x$dose.fct <- factor(x$dose, levels = c('control', sort(unique(x$dose))))
+    x$dose.fct <- factor(x$dose, levels = c(
+      'control',
+      setdiff(
+        sort(unique(x$dose)),
+        'control'
+        )
+      ))
     if (variable == 'adherence') {
       x <- x[order(-as.integer(x$dose.fct), x$delta), ]
       x$y <- 1:nrow(x) + (7 - as.numeric(x$dose.fct))
@@ -16,7 +22,6 @@ plot.delta.waterfall <- function(
       x$y <- 1:nrow(x) + (as.numeric(x$dose.fct) - 1)
     }
     rownames(x) <- NULL
-    # psa.data$y <- 1:nrow(psa.data) + (7 - as.numeric(psa.data$dose.fct))
 
     if (! 'col' %in% names(x)) {
       x$col <- dose.colors[as.character(x$dose)];

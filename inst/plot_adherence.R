@@ -11,7 +11,7 @@ analysis.init(
   split.stdout = TRUE,
   expr = {
     extension <- 'png';
-    plot.path <- file.path(data.folder, 'plots', script.name);
+    plot.path <- file.path(data.folder, 'digIT-EX', 'plots', script.name);
 
     # Exercise adherence and adherence to health devices for the 3 patients in phase 0a.
     # Boxplot with the points shown (stripplot with a barplot overlaid), with columns for each data-type,
@@ -25,11 +25,11 @@ analysis.init(
 
     variable.names <- c('Exercise\nTherapy', 'Watch', 'Blood\nPressure', 'Scale');
 
-    adherence.path <- file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_Adherence_Phase0-1.xlsx');
+    adherence.path <- file.path(data.folder, 'raw_data', 'Phase1', 'PRESTO_Adherence_Phase0-1.xlsx');
     adherence <- parse.adherence.xlsx(adherence.path);
 
     dosage <- read.table(
-      file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_Dose_levels.tsv'),
+      file.path(data.folder, 'raw_data', 'Phase1', 'PRESTO_Dose_levels.tsv'),
       header = TRUE
       )
 
@@ -162,7 +162,7 @@ analysis.init(
       ];
 
     dose.levels <- read.table(
-      file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_Dose_levels.tsv'),
+      file.path(data.folder, 'raw_data', 'Phase1', 'PRESTO_Dose_levels.tsv'),
       header = TRUE
     )
 

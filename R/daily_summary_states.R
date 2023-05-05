@@ -75,7 +75,7 @@ daily.summary.percentile.plot <- function(
     study.day.percentiles <- do.call(
       what = 'cbind.data.frame',
       args = aggregate(
-        formula = agg.formula,
+        x = agg.formula,
         data = daily.summary.watch.on,
         FUN = function(x) {
           c(quantile(x, probs = c(0.05, 0.25, 0.5, 0.75, 0.95)) / 60,

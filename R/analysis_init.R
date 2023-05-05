@@ -10,9 +10,9 @@ analysis.init <- function(data.folder, script.name, split.stdout = TRUE, expr) {
 
   run.date <- Sys.Date();
 
-  plot.path <- file.path(data.folder, 'plots', script.name);
-  log.path <- file.path(data.folder, 'logs', script.name);
-  results.path <- file.path(data.folder, 'results', script.name);
+  plot.path <- file.path(data.folder, 'digIT-EX', 'plots', script.name);
+  log.path <- file.path(data.folder, 'digIT-EX', 'logs', script.name);
+  results.path <- file.path(data.folder, 'digIT-EX', 'results', script.name);
 
   dir.create(plot.path, showWarnings = FALSE, recursive = TRUE);
   dir.create(log.path, showWarnings = FALSE, recursive = TRUE);

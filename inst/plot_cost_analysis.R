@@ -10,10 +10,10 @@ analysis.init(
   script.name = script.name,
   split.stdout = TRUE,
   expr = {
-    plot.path <- file.path(data.folder, 'plots', 'study_time_costs');
+    plot.path <- file.path(data.folder, 'digIT-EX', 'plots', 'study_time_costs');
 
     time.cost.data <- read.table(
-      file.path(data.folder, 'Phase1', 'raw_data', 'PRESTO_Time_and_Cost.tsv'),
+      file.path(data.folder, 'raw_data', 'Phase1', 'PRESTO_Time_and_Cost.tsv'),
       header = TRUE
       );
     colnames(time.cost.data) <- gsub('[.]+', '.', tolower(colnames(time.cost.data)))

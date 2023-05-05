@@ -4,7 +4,7 @@ library(BoutrosLab.plotting.general);
 script.name <- 'daily_summary_states';
 data.folder <- Sys.getenv('EXONC_HOME');
 if (data.folder == '') data.folder <- 'DEXP_results';
-plot.path <- file.path(data.folder, 'plots', script.name);
+plot.path <- file.path(data.folder, 'digIT-EX', 'plots', script.name);
 
 analysis.init(
   data.folder = data.folder,
