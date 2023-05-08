@@ -9,8 +9,8 @@ if (FALSE) {
   for (i in seq_along(files)) {
     f <- fpath[i]
     out <- outpath[i]
-    n_max <- if (!is.na(stringr::str_match(f, 'Time')[1])) 61 else Inf
-    x <- readxl::read_excel(f, n_max = n_max)
+    n.max <- if (!is.na(stringr::str_match(f, 'Time')[1])) 61 else Inf
+    x <- readxl::read_excel(f, n.max = n.max)
     if ('patient identifier' %in% colnames(x)) {
       x[['study id']] <- trimws(x[['patient identifier']], whitespace = '[\\h\\v]')
       x[['patient identifier']] <- NULL
