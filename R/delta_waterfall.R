@@ -3,6 +3,7 @@ plot.delta.waterfall <- function(
     width = 12,
     height = 10,
     resolution = 500,
+    dose.levels = sort(unique(x$dose)),
     variable = c('PSA', 'ki67', 'adherence'),
     filename = NULL,
     ...) {
@@ -10,7 +11,7 @@ plot.delta.waterfall <- function(
     x$dose.fct <- factor(x$dose, levels = c(
       'control',
       setdiff(
-        sort(unique(x$dose)),
+        dose.levels,
         'control'
         )
       ))

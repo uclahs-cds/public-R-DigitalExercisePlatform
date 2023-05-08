@@ -4,6 +4,7 @@ library(BoutrosLab.plotting.general);
 script.name <- 'psa_ki67';
 data.folder <- Sys.getenv('EXONC_HOME');
 if (data.folder == '') data.folder <- 'DEXP_results';
+phase1.only <- FALSE;
 
 analysis.init(
   data.folder = data.folder,
@@ -13,12 +14,25 @@ analysis.init(
     extension <- 'png';
     plot.path <- file.path(data.folder, 'digIT-EX', 'plots', script.name);
 
+    dosage <- read.table(
+      file.path(data.folder, 'raw_data', 'Phase1', 'PRESTO_Dose_levels.tsv'),
+      header = TRUE
+      );
+
     psa.ki67.dose <- read.table(
       file.path(data.folder, 'raw_data', 'Phase1', 'PRESTO_ki67_PSA_data_prostate_FINAL.tsv'),
       header = TRUE
     )
-    colnames(psa.ki67.dose) <- gsub('[.]$', '', tolower(colnames(psa.ki67.dose)))
-    colnames(psa.ki67.dose) <- gsub('[.]+', '.', colnames(psa.ki67.dose))
+    colnames(psa.ki67.dose) <- gsub('[.]$', '', tolower(colnames(psa.ki67.dose)));
+    colnames(psa.ki67.dose) <- gsub('[.]+', '.', colnames(psa.ki67.dose));
+
+    if (phase1.only) {
+      psa.ki67.dose <- merge(psa.ki67.dose, dosage, all.x = TRUE, by = c('study.id', 'dose'));
+      psa.ki67.dose <- psa.ki67.dose[psa.ki67.dose$phase == '1a', ];
+      phase1.suffix <- '_phase1a';
+      } else {
+      phase1.suffix <- '_phase0b-prostate_1a';
+      }
 
     psa.dose <- psa.ki67.dose[
       !is.na(psa.ki67.dose$psa.delta),
@@ -45,18 +59,22 @@ analysis.init(
 
     psa.data$delta <- psa.data$fu.psa.ng.ml - psa.data$bl.psa.ng.ml
 
-    dose.colors <- c('white', colour.gradient('royalblue', 6))
-    names(dose.colors) <- c('control', unique(psa.dose$dose))
-    psa.data$col <- dose.colors[psa.data$dose]
+    dose.colors <- c('white', colour.gradient('royalblue', 6));
+    names(dose.colors) <- c('control', sort(unique(dosage$dose)));
+    psa.data$col <- dose.colors[psa.data$dose];
 
     plot.delta.waterfall(
       psa.data,
       variable = 'PSA',
+      dose.levels = c('control', sort(unique(psa.dose$dose))),
       filename = file.path(
         plot.path,
         generate.filename(
           'digIT-EX',
-          file.core = 'PSA_dose_waterfall_grouped',
+          file.core = paste0(
+            'PSA_dose_waterfall_grouped',
+            phase1.suffix
+            ),
           extension = 'png'
           )
         )
@@ -98,11 +116,15 @@ analysis.init(
     plot.delta.waterfall(
       ki67.data,
       variable = 'ki67',
+      dose.levels = c('control', sort(unique(psa.dose$dose))),
       filename = file.path(
         plot.path,
         generate.filename(
           'digIT-EX',
-          file.core = 'ki67_dose_waterfall_grouped',
+          file.core = paste0(
+            'ki67_dose_waterfall_grouped',
+            phase1.suffix
+            ),
           extension = 'png'
           )
         )
