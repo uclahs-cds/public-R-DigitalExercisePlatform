@@ -59,7 +59,7 @@ analysis.init(
     adherence.long$Percent <- adherence.long$Percent * 100;
 
     adherence.long.0b <- adherence.long[startsWith(adherence.long$phase, '0B'), ];
-    adherence.long.phase1 <- adherence.long[adherence.long$phase %in% c('1a', '0B - Prostate') , ];
+    adherence.long.phase1 <- adherence.long[adherence.long$phase == '1a', ];
 
     # Add dosage
     adherence.long.phase1 <- merge(adherence.long.phase1, dosage, by = 'study.id', all.x = TRUE)
@@ -82,24 +82,38 @@ analysis.init(
       variable.names = variable.names
       );
 
-    doses <- sort(unique(adherence.long.phase1$dose), na.last = NA)
+    doses <- sort(unique(dosage$dose), na.last = NA)
     dose.colors <- c(colour.gradient('royalblue', 6));
     names(dose.colors) <- doses
 
     adherence.long.phase1$Variable.factor.long <- adherence.long.phase1$Variable.factor
     levels(adherence.long.phase1$Variable.factor.long) <- c('Exercise Therapy', 'Watch', 'Blood Pressure', 'Scale');
 
-    adherence.long.phase1$dose.fct <- as.factor(adherence.long.phase1$dose);
+    phase1.doses <- sort(unique(adherence.long.phase1$dose));
+    # missing.doses <- setdiff(doses, unique(adherence.long.phase1$dose));
+    # # This to to fill a dummy NA for the dose so that an empty space is drawn for the dose
+    # adherence.long.phase1 <- merge(
+    #   x = adherence.long.phase1,
+    #   y = data.frame(
+    #     dose = missing.doses,
+    #     Variable.factor = 'attendance'
+    #     ),
+    #   all = TRUE,
+    #   by = c('dose', 'Variable.factor')
+    #   );
+
+    adherence.long.phase1$dose.fct <- factor(adherence.long.phase1$dose, levels = phase1.doses);
+
     dose.adherence.boxplot <- adherence.boxplot(
       x = adherence.long.phase1,
       formula = Percent ~ dose.fct | Variable.factor.long,
-      main = 'Phase 0b - Prostate + Phase 1',
+      main = 'Phase 1',
       main.cex = 2,
       extension = extension,
       phase = 'phase1',
       variable.names = doses,
       use.gotham.font = FALSE,
-      points.col = dose.colors,
+      points.col = dose.colors[as.character(phase1.doses)],
       xlab.label = 'Dose'
       );
 
@@ -107,7 +121,7 @@ analysis.init(
         plot.path,
         generate.filename(
           'digIT-EX',
-          file.core = paste0('1a_1b-prostate', '_adherence_dosage'),
+          file.core = paste0('1a', '_adherence_dosage'),
           extension = 'png'
           )
         );
@@ -128,11 +142,11 @@ analysis.init(
     dose.adherence.boxplot.ET <- adherence.boxplot(
       x = adherence.long.phase1.ET,
       formula = Percent ~ dose.fct,
-      main = 'Phase 0b - Prostate + Phase 1',
+      main = 'Phase 1',
       main.cex = 2,
       extension = extension,
       phase = 'phase1',
-      variable.names = doses,
+      variable.names = phase1.doses,
       use.gotham.font = FALSE,
       points.col = dose.colors[as.character(adherence.long.phase1.ET$dose)],
       xlab.label = 'Dose'
@@ -142,7 +156,7 @@ analysis.init(
       plot.path,
       generate.filename(
         'digIT-EX',
-        file.core = paste0('1a_1b-prostate', '_ET_adherence_dosage'),
+        file.core = paste0('1a', '_ET_adherence_dosage'),
         extension = 'png'
         )
       );
@@ -157,19 +171,14 @@ analysis.init(
 
     # Plot the completed sessions in waterfall plot
     adherence.phase1.waterfall <- adherence[
-      adherence$phase %in% c('1a', '0B - Prostate'),
+      adherence$phase == '1a',
       c('study.id', 'phase', 'completed.exercise.sessions')
       ];
-
-    dose.levels <- read.table(
-      file.path(data.folder, 'raw_data', 'Phase1', 'PRESTO_Dose_levels.tsv'),
-      header = TRUE
-    )
 
     # Add dose data
     adherence.phase1.waterfall <- merge(
       x = adherence.phase1.waterfall,
-      y = dose.levels,
+      y = dosage,
       by = 'study.id',
       all.x = TRUE
       );
@@ -187,7 +196,7 @@ analysis.init(
           extension = 'png'
           )
         )
-      )
+      );
 
     agg.res <- do.call(
       'data.frame',

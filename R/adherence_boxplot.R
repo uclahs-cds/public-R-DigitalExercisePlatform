@@ -31,8 +31,8 @@ adherence.boxplot <- function(
   yaxis.lab <- yat;
   height <- 8;
   width <- 12;
+  lab.cex <- 3;
 
-  lab.cex <- 3
   adherence.plot <- BoutrosLab.plotting.general::create.boxplot(
     formula = formula,
     data = x,
