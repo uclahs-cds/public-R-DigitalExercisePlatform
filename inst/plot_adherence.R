@@ -111,7 +111,7 @@ analysis.init(
       main.cex = 2,
       extension = extension,
       phase = 'phase1',
-      variable.names = doses,
+      variable.names = phase1.doses,
       use.gotham.font = FALSE,
       points.col = dose.colors[as.character(phase1.doses)],
       xlab.label = 'Dose'

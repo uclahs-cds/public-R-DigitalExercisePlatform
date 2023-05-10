@@ -6,8 +6,8 @@
 #' @param expr R code that we want to execute
 #'
 #' @export
-analysis.init <- function(data.folder, script.name, split.stdout = TRUE, expr) {
-
+analysis.init <- function(data.folder, script.name, split.stdout = TRUE, seed = 131313, expr) {
+  set.seed(seed);
   run.date <- Sys.Date();
 
   plot.path <- file.path(data.folder, 'digIT-EX', 'plots', script.name);

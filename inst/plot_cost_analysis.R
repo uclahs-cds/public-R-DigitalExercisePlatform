@@ -33,12 +33,12 @@ analysis.init(
       main.cex = 1.5
       );
 
-    phase1.phase0b.prostate <- time.cost.data.subset[time.cost.data.subset$phase %in% c('1', '0B Prostate'), ];
+    phase1 <- time.cost.data.subset[time.cost.data.subset$phase  == '1', ];
     cost.hour.analysis(
-      cost.data = phase1.phase0b.prostate,
+      cost.data = phase1,
       plot.path = plot.path,
-      suffix = 'phase1.phase0b.prostate',
-      main = sprintf('Phase 0b Prostate + Phase 1 (n = %s)', nrow(phase1.phase0b.prostate)),
+      suffix = 'phase1',
+      main = sprintf('Phase 1 (n = %s)', nrow(phase1)),
       main.cex = 1.5
       );
     }

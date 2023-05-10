@@ -12,7 +12,7 @@ study.hours.plot <- function(
   cost.data,
   plot.path = NULL,
   extension = c('png', 'pdf'),
-  add.t.test.text = TRUE,
+  add.t.test.text = FALSE,
   use.gotham.font = FALSE,
   suffix = '',
   ...) {
@@ -30,6 +30,40 @@ study.hours.plot <- function(
   height <- 6;
   width <- 6;
 
+  paired <- FALSE
+  method <- 'pooled'
+
+  t.test.results <- stats::t.test(
+    x = cost.data$EXONC.DEXP.Time.total.hrs,
+    y = cost.data$Traditional.Time.total.hrs,
+    paired = paired
+    );
+
+  cohens.d <- lsr::cohensD(
+    x = cost.data$EXONC.DEXP.Time.total.hrs,
+    y = cost.data$Traditional.Time.total.hrs,
+    method = method
+    );
+
+
+  t.test.ci <- t.test.results$conf.int;
+  t.test.estimate <- unname(t.test.results$estimate);
+  if (! paired) {
+    t.test.estimate <- t.test.estimate[1] - t.test.estimate[2];
+    }
+
+  # Always reports positive, make it have the same sign as mean difference
+  cohens.d <- cohens.d * sign(t.test.estimate);
+
+  test.text.labels <- c(
+    # sprintf('t-test p = %.5f', t.test.results$p.value),
+    sprintf('mean difference (hours): %.1f', t.test.estimate),
+    sprintf('95%% CI [%.1f, %.1f]', t.test.ci[1], t.test.ci[2]),
+    sprintf('Cohen\'s d = %.1f', cohens.d)
+    );
+
+  test.text.labels <- paste0(test.text.labels, collapse = '\n');
+
   hours.plot <- BoutrosLab.plotting.general::create.boxplot(
     formula = hours ~ as.factor(study),
     data = time.df,
@@ -37,6 +71,10 @@ study.hours.plot <- function(
     ylab.label = 'Estimated Time Commitment, Hours',
     xlab.label = '',
     ylimits = c(-10, 175),
+    add.text = TRUE,
+    text.labels = test.text.labels,
+    text.x = 1.8,
+    text.y = 150,
     ...
     );
 
@@ -68,7 +106,7 @@ study.hours.plot <- function(
       plot.path,
       generate.filename(
         'digIT-EX',
-        file.core = paste0('phase0b_boxplot_study_hours', suffix),
+        file.core = paste0('boxplot_study_hours', suffix),
         extension = extension
         )
       );
@@ -133,7 +171,7 @@ total.cost.plot <- function(
       plot.path,
       generate.filename(
         'digIT-EX',
-        file.core = paste0('phase0b_boxplot_total_cost', suffix),
+        file.core = paste0('boxplot_total_cost', suffix),
         extension = extension
         )
       );
