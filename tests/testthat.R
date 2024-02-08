@@ -1,4 +1,4 @@
 library(testthat)
-library(EXONC.DEXP)
+library(EXOC.DPEx)
 
-test_check('EXONC.DEXP')
+test_check('EXOC.DPEx')

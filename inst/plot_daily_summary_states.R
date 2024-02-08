@@ -1,4 +1,4 @@
-library(EXONC.DEXP);
+library(EXOC.DPEx);
 library(BoutrosLab.plotting.general);
 
 script.name <- 'daily_summary_states';
@@ -12,7 +12,7 @@ analysis.init(
   split.stdout = TRUE,
   expr = {
     daily.summary <- read.table(
-      system.file('extdata', 'daily_summary.tsv', package = 'EXONC.DEXP'),
+      system.file('extdata', 'daily_summary.tsv', package = 'EXOC.DPEx'),
       sep = '\t',
       header = TRUE
       );

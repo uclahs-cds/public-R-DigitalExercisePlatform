@@ -1,4 +1,4 @@
-library(EXONC.DEXP);
+library(EXOC.DPEx);
 library(BoutrosLab.plotting.general);
 library(fs);
 
@@ -12,7 +12,7 @@ analysis.init(
   split.stdout = TRUE,
   expr = {
     run.scripts <- list.files(
-      fs::path_package('EXONC.DEXP'), # Works better with devtools::load_all
+      fs::path_package('EXOC.DPEx'), # Works better with devtools::load_all
       pattern = '*\\.R$',
       full.names = TRUE
       );
@@ -23,7 +23,7 @@ analysis.init(
       }
 
     # plot.path <- file.path(data.folder, 'digIT-EX', 'plots');
-    # update.figures.script <- system.file('bash_scripts', 'update_combined_figures.sh', package = 'EXONC.DEXP');
+    # update.figures.script <- system.file('bash_scripts', 'update_combined_figures.sh', package = 'EXOC.DPEx');
     # update.figures.script <- paste(update.figures.script, plot.path);
     # print(paste0('Running command: ', update.figures.script))
     # system(update.figures.script);

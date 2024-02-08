@@ -1,4 +1,4 @@
-library(EXONC.DEXP);
+library(EXOC.DPEx);
 library(BoutrosLab.plotting.general);
 
 script.name <- 'submax_analysis';
@@ -12,13 +12,13 @@ analysis.init(
   split.stdout = TRUE,
   expr = {
     submax.data <- read.table(
-      system.file('extdata', 'submax.tsv', package = 'EXONC.DEXP'),
+      system.file('extdata', 'submax.tsv', package = 'EXOC.DPEx'),
       sep = '\t',
       header = TRUE
       );
 
     submax.long.data <- read.table(
-      system.file('extdata', 'submax_long.tsv', package = 'EXONC.DEXP'),
+      system.file('extdata', 'submax_long.tsv', package = 'EXOC.DPEx'),
       sep = '\t',
       header = TRUE
       );

@@ -1,4 +1,4 @@
-library(EXONC.DEXP);
+library(EXOC.DPEx);
 library(BoutrosLab.plotting.general);
 library(lme4);
 library(lmerTest);
@@ -17,13 +17,13 @@ analysis.init(
   expr = {
     daily.summary <- read.table(
       # TODO: Fix paths
-      system.file('extdata', 'daily_summary.tsv', package = 'EXONC.DEXP'),
+      system.file('extdata', 'daily_summary.tsv', package = 'EXOC.DPEx'),
       sep = '\t',
       header = TRUE
       );
 
     baseline.data <- read.table(
-      system.file('extdata', 'baseline_data.tsv', package = 'EXONC.DEXP'),
+      system.file('extdata', 'baseline_data.tsv', package = 'EXOC.DPEx'),
       sep = '\t',
       header = TRUE
       );
