@@ -1,4 +1,4 @@
-library(EXONC.DEXP);
+library(EXOC.DPEx);
 library(BoutrosLab.plotting.general);
 
 script.name <- 'cost_analysis';
@@ -20,7 +20,7 @@ analysis.init(
     colnames(time.cost.data) <- gsub('[.]$', '', colnames(time.cost.data))
 
     time.cost.data.subset <- time.cost.data[, c('id', 'total.cost', 'digitx.time.total.hrs', 'traditional.time.total.hrs', 'phase')]
-    colnames(time.cost.data.subset) <- c('patient.id', 'Total.Cost', 'EXONC.DEXP.Time.total.hrs', 'Traditional.Time.total.hrs', 'phase')
+    colnames(time.cost.data.subset) <- c('patient.id', 'Total.Cost', 'EXOC.DPEx.Time.total.hrs', 'Traditional.Time.total.hrs', 'phase')
     time.cost.data.subset$Patient <- time.cost.data.subset$patient.id
 
 

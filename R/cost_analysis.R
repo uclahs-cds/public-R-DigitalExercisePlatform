@@ -1,4 +1,4 @@
-#' Creates the estimated study hours plot for EXONC.DEXP
+#' Creates the estimated study hours plot for EXOC.DPEx
 
 #' @param cost.data the cost data frame.
 #' @param plot.path path to the plot output
@@ -17,13 +17,13 @@ study.hours.plot <- function(
   suffix = '',
   ...) {
   write.plot <- ! is.null(plot.path);
-  EXONC.DEXP.hours <- cbind(cost.data[, c('Patient', 'patient.id', 'EXONC.DEXP.Time.total.hrs')], study = 1);
-  colnames(EXONC.DEXP.hours) <- c('Patient', 'patient.id', 'hours', 'study');
+  EXOC.DPEx.hours <- cbind(cost.data[, c('Patient', 'patient.id', 'EXOC.DPEx.Time.total.hrs')], study = 1);
+  colnames(EXOC.DPEx.hours) <- c('Patient', 'patient.id', 'hours', 'study');
   trad.hours <- cbind(cost.data[, c('Patient', 'patient.id', 'Traditional.Time.total.hrs')], study = 0);
   colnames(trad.hours) <- c('Patient', 'patient.id', 'hours', 'study');
 
   time.df <- rbind(
-    EXONC.DEXP.hours,
+    EXOC.DPEx.hours,
     trad.hours
     );
 
@@ -34,13 +34,13 @@ study.hours.plot <- function(
   method <- 'pooled'
 
   t.test.results <- stats::t.test(
-    x = cost.data$EXONC.DEXP.Time.total.hrs,
+    x = cost.data$EXOC.DPEx.Time.total.hrs,
     y = cost.data$Traditional.Time.total.hrs,
     paired = paired
     );
 
   cohens.d <- lsr::cohensD(
-    x = cost.data$EXONC.DEXP.Time.total.hrs,
+    x = cost.data$EXOC.DPEx.Time.total.hrs,
     y = cost.data$Traditional.Time.total.hrs,
     method = method
     );
@@ -86,7 +86,7 @@ study.hours.plot <- function(
     panel.x <- 1.9;
     panel.y <- 155;
     t.test.layer <- ttest.plot.text(
-      x = cost.data$EXONC.DEXP.Time.total.hrs,
+      x = cost.data$EXOC.DPEx.Time.total.hrs,
       y = cost.data$Traditional.Time.total.hrs,
       panel.x = panel.x,
       panel.y = panel.y,
@@ -124,7 +124,7 @@ study.hours.plot <- function(
     }
   }
 
-#' Creates the estimated total cost boxplot plot for EXONC.DEXP
+#' Creates the estimated total cost boxplot plot for EXOC.DPEx
 
 #' @param cost.data the cost data frame.
 #' @param extension the extension for the plot
@@ -145,7 +145,7 @@ total.cost.plot <- function(
   write.plot <- ! is.null(plot.path);
   cost.data$phase0b <- ifelse(cost.data$Patient <= 3, FALSE, TRUE);
   phase.0b.costs <- cbind(cost.data[cost.data$phase0b, 'Total.Cost', drop = FALSE], group = 1);
-  # Add the EXONC.DEXP costs as '0'
+  # Add the EXOC.DPEx costs as '0'
   phase.0b.costs <- rbind(phase.0b.costs, c(0, 2));
 
   # phase.0b.costs

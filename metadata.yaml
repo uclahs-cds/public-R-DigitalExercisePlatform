@@ -1,8 +1,8 @@
 ---
-Category: ''  # shoule be one of docker/pipeline/project/template/tool/training/users
-Description: ''  # Description of why the repository exists
-Maintainers: ['stefaneng@mednet.ucla.edu']  # email address of maintainers
-Contributors: ['Stefan Eng', 'Lydia Liu']  # Full names of contributors
-Languages: ['R']  # programming languages used
-Dependencies: 'BPG'  # packages, tools that repo needs to run
-References: ''  # is the tool/dependencies published, is there a confluence page
+Category: "project" # shoule be one of docker/pipeline/project/template/tool/training/users
+Description: "Code for Phase 1a, Decentralized Trial of Neoadjuvant Exercise Therapy in Prostate Cancer (PRESTO1) and A Digital, Decentralized Clinical Trial of Exercise Therapy in Cancer (DPEx)" # Description of why the repository exists
+Maintainers: [""] # email address of maintainers
+Contributors: ["Stefan Eng", "Lydia Y Liu"] # Full names of contributors
+Languages: ["R"] # programming languages used
+Dependencies: "BPG" # packages, tools that repo needs to run
+References: "" # is the tool/dependencies published, is there a confluence page

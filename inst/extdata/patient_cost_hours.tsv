@@ -1,4 +1,4 @@
-"patient.id"	"Patient"	"Total.Cost"	"EXONC.DEXP.Time.total.hrs"	"Traditional.Time.total.hrs"	"Cancer.Type"	"plot.color"
+"patient.id"	"Patient"	"Total.Cost"	"EXOC.DPEx.Time.total.hrs"	"Traditional.Time.total.hrs"	"Cancer.Type"	"plot.color"
 "EX001"	1	143	33	61.6	"Breast"	"orange"
 "EX002"	2	170.5	39.1666666666667	54.6666666666667	"Breast"	"orange"
 "EX003"	3	154	36.3333333333333	80.2	"Breast"	"orange"

@@ -129,3 +129,37 @@ submax.analysis <- function(
 
   invisible(submax.plot);
   }
+
+submax.delta.summary <- function(submax.long.data, dosage, results.path) {
+
+  doses <- sort(unique(dosage$dose), na.last = NA)
+
+  submax.long.data$dose.fct <- factor(submax.long.data$dose, levels = doses)
+
+  dose.diff.model <- lm(delta ~ 0 + dose.fct, data = submax.long.data)
+  dose.diff.table <- cbind.data.frame(dose = doses, summary(dose.diff.model)$coefficient)
+
+  dose.diff.model.all <- lm(delta ~ 1, data = wide.phase1.0b.submax)
+  dose.diff.table.all <- cbind.data.frame(dose = 'All', summary(dose.diff.model.all)$coefficient)
+  dose.diff.table <- rbind(dose.diff.table, dose.diff.table.all)
+
+  # reformat table for output
+  dose.diff.table$dose.fct <- factor(dose.diff.table$dose, levels = c('All', doses))
+  dose.diff.table <- dose.diff.table[order(dose.diff.table$dose.fct), ]
+  dose.diff.string <- paste0(round(dose.diff.table$Estimate, 1),
+                              ' (', round(dose.diff.table$Estimate - dose.diff.table[, 'Std. Error'] * 1.96, 1),
+                              ' - ', round(dose.diff.table$Estimate + dose.diff.table[, 'Std. Error'] * 1.96, 1),
+                              ')')
+  dose.diff.df <- as.data.frame(matrix(dose.diff.string, ncol = length(dose.diff.string)))
+  colnames(dose.diff.df) <- paste0('Dose: ', dose.diff.table$dose, ' (minutes)')
+  dose.diff.df <- cbind(Variable = 'Seconds to Submax', dose.diff.df)
+
+  filename <- print(file.path(
+      results.path,
+      generate.filename(
+          'phase1_0b-prostate', 'submax_diff_mean_ci', 'tsv'
+          )
+      ))
+  write.table(dose.diff.df, filename, quote = F, sep = '\t', row.names = F, col.names = T)
+
+}
