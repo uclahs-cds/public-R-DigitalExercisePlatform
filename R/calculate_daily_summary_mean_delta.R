@@ -1,14 +1,14 @@
 mean.delta.analysis <- function(daily.summary, dosage, results.path) {
 
-    diff_list <- lapply(split(daily.summary, daily.summary$patient), function(x) calculate.daily.summary.mean.delta(x, plot_vars))
+    diff.list <- lapply(split(daily.summary, daily.summary$patient), function(x) calculate.daily.summary.mean.delta(x, plot_vars))
 
-    diff_df <- plyr::rbind.fill(diff_list)
-    diff_df <- cbind(patient = patients, diff_df)
-    print(summary(diff_df))
+    diff.df <- plyr::rbind.fill(diff.list)
+    diff.df <- cbind(patient = patients, diff.df)
+    print(summary(diff.df))
 
     # merge with dose
-    diff_df <- merge(
-        x = diff_df,
+    diff.df <- merge(
+        x = diff.df,
         y = dosage[, c('patient', 'dose', 'relative.dose.intensity')],
         by = 'patient',
         all.x = TRUE
@@ -16,23 +16,23 @@ mean.delta.analysis <- function(daily.summary, dosage, results.path) {
 
     # calculate delta per variable
     doses <- sort(unique(dosage$dose), na.last = NA)
-    diff_df$dose.fct <- factor(diff_df$dose, levels = doses)
+    diff.df$dose.fct <- factor(diff.df$dose, levels = doses)
 
     # output in table
-    diff_output <- lapply(plot_vars, function(x) {
+    diff.output <- lapply(plot_vars, function(x) {
 
         # table for each dose level
-        dose.diff.model <- lm(diff_df[, x] ~ 0 + diff_df$dose.fct)
+        dose.diff.model <- lm(diff.df[, x] ~ 0 + diff.df$dose.fct)
         dose.diff.table <- cbind.data.frame(dose = doses, summary(dose.diff.model)$coefficient)
 
         # table for all patients
-        dose.diff.model.all <- lm(diff_df[, x] ~ 1)
+        dose.diff.model.all <- lm(diff.df[, x] ~ 1)
         dose.diff.table.all <- cbind.data.frame(dose = 0, summary(dose.diff.model.all)$coefficient)
         dose.diff.table <- rbind(dose.diff.table.all, dose.diff.table)
 
         dose.diff.string <- paste0(round(dose.diff.table$Estimate, 1),
-                                    ' (', round(dose.diff.table$Estimate - dose.diff.table[, 'Std. Error']*1.96, 1),
-                                    ' - ', round(dose.diff.table$Estimate + dose.diff.table[, 'Std. Error']*1.96, 1),
+                                    ' (', round(dose.diff.table$Estimate - dose.diff.table[, 'Std. Error'] * 1.96, 1),
+                                    ' - ', round(dose.diff.table$Estimate + dose.diff.table[, 'Std. Error'] * 1.96, 1),
                                     ')')
         dose.diff.df <- as.data.frame(matrix(dose.diff.string, ncol = length(dose.diff.string)))
         colnames(dose.diff.df) <- dose.diff.table$dose
@@ -40,17 +40,17 @@ mean.delta.analysis <- function(daily.summary, dosage, results.path) {
         dose.diff.df
     })
 
-    dose_diff_df <- plyr::rbind.fill(diff_output)
-    colnames(dose_diff_df) <- paste0('Dose: ', colnames(dose_diff_df), ' (minutes)')
-    dose_diff_df <- cbind(Variable = vars_nice_names, dose_diff_df)
+    dose.diff.df <- plyr::rbind.fill(diff.output)
+    colnames(dose.diff.df) <- paste0('Dose: ', colnames(dose.diff.df), ' (minutes)')
+    dose.diff.df <- cbind(Variable = vars_nice_names, dose.diff.df)
 
-    filename = print(file.path(
+    filename <- print(file.path(
         results.path,
         generate.filename(
             'phase1_0b-prostate', 'daily_summary_before7_after7_diff_mean_ci', 'tsv'
             )
         ))
-    write.table(dose_diff_df, filename, quote = F, sep = '\t', row.names = F, col.names = T)
+    write.table(dose.diff.df, filename, quote = F, sep = '\t', row.names = F, col.names = T)
 
 }
 
@@ -85,7 +85,7 @@ calculate.daily.summary.mean.delta <- function(daily.summary, vars,
         before.mean <- mean(before, na.rm = T)
 
         # actually takes the last days + 1
-        after <- y[(length(y)-days+1):length(y)]
+        after <- y[(length(y) - days + 1):length(y)]
         after.mean <- mean(after, na.rm = T)
 
         # print(y)
