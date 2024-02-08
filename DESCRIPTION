@@ -3,7 +3,7 @@ Type: Package
 Title: Decentralized Clinical Trial of Exercise Therapy in Cancer
 Version: 0.2.0
 Author: Stefan Eng, Lydia Y Liu
-Maintainer:
+Maintainer: Zhuyu Qiu <zqiu@mednet.ucla.edu>
 Description: Code for 'Phase 1a, Decentralized Trial of Neoadjuvant Exercise Therapy in Prostate Cancer (PRESTO1)' and 'A Digital, Decentralized Clinical Trial of Exercise Therapy in Cancer (DPEx)'
 Depends: R (>= 2.10)
 Suggests: performance,
