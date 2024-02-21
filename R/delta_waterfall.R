@@ -64,7 +64,7 @@ plot.delta.waterfall <- function(
             ylab.label <- c('Absolute change in Ki-67 (%) from\npretreatment to post-intervention')
         } else if (variable == 'submax') {
             if (percent) {
-                by = 0.1
+                by <- 0.1
                 ylab.label <- bquote(bold('Time to 80% Submax Relative Change'))
             } else {
                 by <- 60
